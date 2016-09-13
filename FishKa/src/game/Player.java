@@ -1,6 +1,6 @@
 package game;
 
-import graphics.PlayerSprite;
+import graphics.Sprite;
 import input.Input;
 
 import java.awt.*;
@@ -9,6 +9,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Player {
+    private static final String LEFT_IMAGE_NAME = "pl64L.png";
+    private static final String RIGHT_IMAGE_NAME = "pl64R.png";
+    private static final String DEATH_IMAGE_NAME = "death.png";
 
     private static final int SPRITE_SIZE = 64;
 
@@ -16,23 +19,22 @@ public class Player {
 
     private int x;
     private int y;
-    private final int speed;
+    private int speed;
     private Heading heading;
-    private PlayerSprite sprite;
+    public Sprite sprite;
     private int index;
     private Map<Heading, Integer> headingMap;
 
     Player(){
 
-        x = 300;
-        y = 300;
+        x = 200;
+        y = 200;
         speed = 5;
         heading = heading.LEFT;
-        sprite = new PlayerSprite();
+        sprite = new Sprite(LEFT_IMAGE_NAME, RIGHT_IMAGE_NAME, DEATH_IMAGE_NAME);
         headingMap = new HashMap<Heading, Integer>();
 
-        index = 1;
-
+        index = 0;
         for (Heading h: Heading.values()){
             headingMap.put(h, index);
             index++;
@@ -76,8 +78,19 @@ public class Player {
 
     }
 
+    public int getX(){
+        return x;
+    }
+
+    public int getY(){
+        return y;
+    }
+
+    public Sprite getSprite(){
+        return sprite;
+    }
+
     public void render(Graphics2D g) {
-        int z =  headingMap.get(heading);
-        sprite.render(g, x, y, z);
+        sprite.render(g, x, y, headingMap.get(heading));
     }
 }
