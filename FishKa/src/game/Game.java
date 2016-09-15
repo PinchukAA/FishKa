@@ -1,6 +1,7 @@
 package game;
 
 import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,8 +25,11 @@ public class Game implements Runnable {
     private Thread gameThread;
     private Graphics2D graphics;
     private Input input;
+
     private Player player;
     private List<SharkFish> sharkFishList;
+    private List<YellowFish> yellowFishList;
+
     private GameOver gameOver;
 
     public Game() {
@@ -40,9 +44,18 @@ public class Game implements Runnable {
 
         player = new Player();
         sharkFishList = new ArrayList<SharkFish>();
-        for (int i = 0; i < 10; i++){
-            sharkFishList.add(new SharkFish());
+        for (int i = 0; i < 5; i++){
+            sharkFishList.add(new SharkFish(getRandomNumber(),getRandomNumber()));
         }
+
+        yellowFishList = new ArrayList<YellowFish>();
+        for(int i = 0; i < 40; i++){
+            yellowFishList.add(new YellowFish(getRandomNumber(), getRandomNumber()));
+        }
+    }
+
+    public int getRandomNumber(){
+       return (int)(Math.random()*800);
     }
 
     public synchronized void start() {
@@ -62,7 +75,7 @@ public class Game implements Runnable {
             return;
 
         running = false;
-
+/*
         try {
             gameThread.join();
         } catch (InterruptedException e) {
@@ -70,30 +83,42 @@ public class Game implements Runnable {
         }
 
         cleanUp();
-
+*/
     }
 
     float delta = 0;
     float beta = 0;
     private void update() {
-     //   delta++;
-     //   if (delta > 70){
-            for(SharkFish sharkFish: sharkFishList) {
-                beta++;
-                if (beta > 80){
-                    sharkFish.chooseDirection();
-                    beta = 0;
-                }
-
+        for(SharkFish sharkFish: sharkFishList) {
+            beta++;
+            if (beta > 70){
+                sharkFish.chooseDirection();
+                beta = 0;
             }
-      //      delta = 0;
-      //  }
+        }
+
+        for(YellowFish yellowFish: yellowFishList) {
+            delta++;
+            if (delta > 50){
+                yellowFish.chooseDirection();
+                delta = 0;
+            }
+        }
 
         player.update(input);
         for(SharkFish sharkFish: sharkFishList) {
             sharkFish.update();
-            check(sharkFish);
+            sharkFishCheck(sharkFish, yellowFishList);
         }
+
+        YellowFish yellowFishForRemove = null;
+        for(YellowFish yellowFish: yellowFishList) {
+            yellowFish.update();
+            yellowFishForRemove = yellowFishCheck(yellowFish);
+            if (yellowFishForRemove != null) break;
+        }
+        if (yellowFishForRemove!= null)
+        yellowFishList.remove(yellowFishForRemove);
     }
 
     private void render() {
@@ -101,25 +126,62 @@ public class Game implements Runnable {
         for(SharkFish sharkFish: sharkFishList) {
             sharkFish.render(graphics);
         }
+
         player.render(graphics);
+
+        for(YellowFish yellowFish: yellowFishList) {
+            yellowFish.render(graphics);
+        }
 
         Window.swapBuffers();
     }
 
-    public void check(SharkFish sharkFish){
+    public void sharkFishCheck(SharkFish sharkFish, List<YellowFish> yellowFishList){
         int plX = player.getX();
         int plY = player.getY();
         int shX = sharkFish.getX();
         int shY = sharkFish.getY();
 
-        if(plX <= shX + 64 && plX >= shX && plY <= shY + 64 && plY >= shY ){
+        if(plX < shX + 64 && plX > shX && plY < shY + 64 && plY > shY ){
+//        if(plX > shX - 34 && plX < shX + 98 && plY > shY - 34 && plY < shY + 98 ){
             Window.clear();
-            player.getSprite().render(graphics, player.getX(), player.getY(), 2);
-            gameOver.render(graphics);
+            gameOver.render(graphics, plX, plY);
             Window.swapBuffers();
-            running = false;
+            stop();
         }
+
+        YellowFish yellowFishForRemove = null;
+        for(YellowFish yellowFish: yellowFishList){
+            int yX = yellowFish.getX();
+            int yY = yellowFish.getY();
+
+            if(yX < shX + 48 && yX > shX && yY < shY + 48 && yY > shY ){
+                yellowFishForRemove = yellowFish;
+                break;
+            }
+        }
+        yellowFishList.remove(yellowFishForRemove);
     }
+
+    public YellowFish yellowFishCheck(YellowFish yellowFish){
+        int plX = player.getX();
+        int plY = player.getY();
+        int yX = yellowFish.getX();
+        int yY = yellowFish.getY();
+
+
+   //     if(yX <= plX + 16 && yX >= plX && yY <= plY + 16 && yY >= plY ){
+        if(yX > plX - 28 && yX < plX + 44 && yY > plY - 28 && yY < plY + 44 ){
+            return yellowFish;
+        }
+
+        if(yX > plX - 28 && yX < plX + 44 && yY > plY - 28 && yY < plY + 44 ){
+            return yellowFish;
+        }
+
+        return null;
+    }
+
 
     public void run() {
 
@@ -174,9 +236,9 @@ public class Game implements Runnable {
         }
 
     }
-
+/*
     private void cleanUp() {
         Window.destroy();
     }
-
+*/
 }

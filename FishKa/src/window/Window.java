@@ -4,16 +4,17 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.util.Arrays;
 
-import javax.swing.JFrame;
+import javax.swing.*;
 
 import input.Input;
 
-public abstract class Window{
+public class Window{
 
     private static boolean created	= false;
     private static JFrame window;
@@ -43,6 +44,7 @@ public abstract class Window{
         window.pack();
         window.setLocationRelativeTo(null);
         window.setVisible(true);
+
 
         buffer = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         bufferData = ((DataBufferInt) buffer.getRaster().getDataBuffer()).getData();
@@ -84,4 +86,5 @@ public abstract class Window{
     public static void addInputListener(Input inputListener) {
         window.add(inputListener);
     }
+
 }

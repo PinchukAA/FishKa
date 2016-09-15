@@ -11,7 +11,6 @@ import java.util.Map;
 public class Player {
     private static final String LEFT_IMAGE_NAME = "pl64L.png";
     private static final String RIGHT_IMAGE_NAME = "pl64R.png";
-    private static final String DEATH_IMAGE_NAME = "death.png";
 
     private static final int SPRITE_SIZE = 64;
 
@@ -31,7 +30,7 @@ public class Player {
         y = 200;
         speed = 5;
         heading = heading.LEFT;
-        sprite = new Sprite(LEFT_IMAGE_NAME, RIGHT_IMAGE_NAME, DEATH_IMAGE_NAME);
+        sprite = new Sprite(LEFT_IMAGE_NAME, RIGHT_IMAGE_NAME);
         headingMap = new HashMap<Heading, Integer>();
 
         index = 0;
@@ -84,10 +83,6 @@ public class Player {
 
     public int getY(){
         return y;
-    }
-
-    public Sprite getSprite(){
-        return sprite;
     }
 
     public void render(Graphics2D g) {

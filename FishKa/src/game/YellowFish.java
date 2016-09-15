@@ -6,14 +6,14 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SharkFish implements Fish{
-    private static final String LEFT_IMAGE_NAME = "sh128L.png";
-    private static final String RIGHT_IMAGE_NAME = "sh128R.png";
+public class YellowFish implements Fish {
 
-    private static final int SPRITE_SIZE = 128;
+    private static final String LEFT_IMAGE_NAME = "y48L.png";
+    private static final String RIGHT_IMAGE_NAME = "y48R.png";
 
-    private enum Heading{LEFT, RIGHT}
-//    private enum Direction{UP, DOWN, LEFT, RIGHT, UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT}
+    private static final int SPRITE_SIZE = 48;
+
+    private enum Heading {LEFT, RIGHT}
 
     private int x;
     private int y;
@@ -24,40 +24,43 @@ public class SharkFish implements Fish{
     private Map<Heading, Integer> headingMap;
     private Integer direction;
 
-    SharkFish(int x, int y){
+    public YellowFish(int x, int y) {
         this.x = x;
         this.y = y;
-        speed = 4;
+        speed = 3;
         heading = heading.LEFT;
         sprite = new Sprite(LEFT_IMAGE_NAME, RIGHT_IMAGE_NAME);
         headingMap = new HashMap<Heading, Integer>();
         direction = 0;
 
         index = 0;
-        for (Heading h: Heading.values()) {
+        for (Heading h : Heading.values()) {
             headingMap.put(h, index);
             index++;
         }
     }
 
-    public void chooseDirection(){
-        direction = (int)(Math.random()*8);
-    }
-
+    @Override
     public int getX() {
         return x;
     }
 
+    @Override
     public int getY() {
         return y;
     }
 
-    public void update() {
+    @Override
+    public void chooseDirection() {
+        direction = (int) (Math.random() * 8);
+    }
 
+    @Override
+    public void update() {
         int newX = x;
         int newY = y;
 
-        switch(direction){
+        switch (direction) {
             case 0:
                 newY -= speed;
                 break;
@@ -110,6 +113,8 @@ public class SharkFish implements Fish{
         y = newY;
     }
 
+
+    @Override
     public void render(Graphics2D g) {
         sprite.render(g, x, y, headingMap.get(heading));
     }
