@@ -28,7 +28,7 @@ public class YellowFish implements Fish {
         this.x = x;
         this.y = y;
         speed = 3;
-        heading = heading.LEFT;
+        heading = heading.RIGHT;
         sprite = new Sprite(LEFT_IMAGE_NAME, RIGHT_IMAGE_NAME);
         headingMap = new HashMap<Heading, Integer>();
         direction = 0;

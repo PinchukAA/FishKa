@@ -1,8 +1,6 @@
 package game;
 
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.util.ArrayList;
 import java.util.List;
 
 import input.Input;
@@ -27,9 +25,8 @@ public class Game implements Runnable {
     private Input input;
 
     private Player player;
-    private List<SharkFish> sharkFishList;
-    private List<YellowFish> yellowFishList;
-    Integer count;
+    private FishUpdater fishUpdater;
+
 
     private GameOver gameOver;
 
@@ -38,27 +35,15 @@ public class Game implements Runnable {
         Window.create(WIDTH, HEIGHT, TITLE, CLEAR_COLOR, NUM_BUFFERS);
         graphics = Window.getGraphics();
 
-        count = 0;
         input = new Input() ;
         gameOver = new GameOver();
 
         Window.addInputListener(input);
 
         player = new Player();
-        sharkFishList = new ArrayList<SharkFish>();
-        for (int i = 0; i < 5; i++){
-            sharkFishList.add(new SharkFish(getRandomNumber(),getRandomNumber()));
-        }
-
-        yellowFishList = new ArrayList<YellowFish>();
-        for(int i = 0; i < 1000; i++){
-            yellowFishList.add(new YellowFish(getRandomNumber(), getRandomNumber()));
-        }
+        fishUpdater = new FishUpdater(player);
     }
 
-    public int getRandomNumber(){
-       return (int)(Math.random()*800);
-    }
 
     public synchronized void start() {
 
@@ -79,41 +64,15 @@ public class Game implements Runnable {
         running = false;
     }
 
-    float delta = 0;
-    float beta = 0;
+
     private void update() {
-        for(SharkFish sharkFish: sharkFishList) {
-            beta++;
-            if (beta > 70){
-                sharkFish.chooseDirection();
-                beta = 0;
-            }
-        }
-
-        for(YellowFish yellowFish: yellowFishList) {
-            delta++;
-            if (delta > 50){
-                yellowFish.chooseDirection();
-                delta = 0;
-            }
-        }
-
         player.update(input);
-        for(SharkFish sharkFish: sharkFishList) {
-            sharkFish.update();
-            sharkFishCheck(sharkFish, yellowFishList);
+        if (fishUpdater.update()){
+            gameOver.render(graphics, player.getX() - 64, player.getY() - 64);
+            Window.swapBuffers();
+            stop();
         }
 
-        YellowFish yellowFishForRemove = null;
-        for(YellowFish yellowFish: yellowFishList) {
-            yellowFish.update();
-            yellowFishForRemove = yellowFishCheck(yellowFish);
-            if (yellowFishForRemove != null) break;
-        }
-        if (yellowFishForRemove!= null) {
-            yellowFishList.remove(yellowFishForRemove);
-            count++;
-        }
     }
 
     private void render() {
@@ -121,67 +80,13 @@ public class Game implements Runnable {
 
         graphics.setColor(Color.BLACK);
         graphics.setFont(new Font("TimesRoman", Font.BOLD, 20));
-        graphics.drawString("Score: " + count.toString(), 20, 30);
-
-        for(SharkFish sharkFish: sharkFishList) {
-            sharkFish.render(graphics);
-        }
+        graphics.drawString("Score: " + fishUpdater.getScore().toString(), 20, 30);
 
         player.render(graphics);
-
-        for(YellowFish yellowFish: yellowFishList) {
-            yellowFish.render(graphics);
-        }
+        fishUpdater.render(graphics);
 
         Window.swapBuffers();
     }
-
-    public void sharkFishCheck(SharkFish sharkFish, List<YellowFish> yellowFishList){
-        int plX = player.getX();
-        int plY = player.getY();
-        int shX = sharkFish.getX();
-        int shY = sharkFish.getY();
-
-//        if(plX < shX + 64 && plX > shX && plY < shY + 64 && plY > shY ){
-        if(plX > shX - 14 && plX < shX + 78 && plY > shY - 14 && plY < shY + 78 ){
-         //   Window.clear();
-            gameOver.render(graphics, plX - 64, plY - 64);
-            Window.swapBuffers();
-            stop();
-        }
-
-        YellowFish yellowFishForRemove = null;
-        for(YellowFish yellowFish: yellowFishList){
-            int yX = yellowFish.getX();
-            int yY = yellowFish.getY();
-
-            if(yX < shX + 48 && yX > shX && yY < shY + 48 && yY > shY ){
-                yellowFishForRemove = yellowFish;
-                break;
-            }
-        }
-        yellowFishList.remove(yellowFishForRemove);
-    }
-
-    public YellowFish yellowFishCheck(YellowFish yellowFish){
-        int plX = player.getX();
-        int plY = player.getY();
-        int yX = yellowFish.getX();
-        int yY = yellowFish.getY();
-
-
-   //     if(yX <= plX + 16 && yX >= plX && yY <= plY + 16 && yY >= plY ){
-        if(yX > plX - 28 && yX < plX + 44 && yY > plY - 28 && yY < plY + 44 ){
-            return yellowFish;
-        }
-
-        if(yX > plX - 28 && yX < plX + 44 && yY > plY - 28 && yY < plY + 44 ){
-            return yellowFish;
-        }
-
-        return null;
-    }
-
 
     public void run() {
 
@@ -236,9 +141,5 @@ public class Game implements Runnable {
         }
 
     }
-/*
-    private void cleanUp() {
-        Window.destroy();
-    }
-*/
+
 }

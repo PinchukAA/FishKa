@@ -27,7 +27,7 @@ public class SharkFish implements Fish{
     SharkFish(int x, int y){
         this.x = x;
         this.y = y;
-        speed = 4;
+        speed = 6;
         heading = heading.LEFT;
         sprite = new Sprite(LEFT_IMAGE_NAME, RIGHT_IMAGE_NAME);
         headingMap = new HashMap<Heading, Integer>();
