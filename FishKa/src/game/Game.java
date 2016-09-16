@@ -1,6 +1,6 @@
 package game;
 
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +29,7 @@ public class Game implements Runnable {
     private Player player;
     private List<SharkFish> sharkFishList;
     private List<YellowFish> yellowFishList;
+    Integer count;
 
     private GameOver gameOver;
 
@@ -37,6 +38,7 @@ public class Game implements Runnable {
         Window.create(WIDTH, HEIGHT, TITLE, CLEAR_COLOR, NUM_BUFFERS);
         graphics = Window.getGraphics();
 
+        count = 0;
         input = new Input() ;
         gameOver = new GameOver();
 
@@ -49,7 +51,7 @@ public class Game implements Runnable {
         }
 
         yellowFishList = new ArrayList<YellowFish>();
-        for(int i = 0; i < 40; i++){
+        for(int i = 0; i < 1000; i++){
             yellowFishList.add(new YellowFish(getRandomNumber(), getRandomNumber()));
         }
     }
@@ -75,15 +77,6 @@ public class Game implements Runnable {
             return;
 
         running = false;
-/*
-        try {
-            gameThread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        cleanUp();
-*/
     }
 
     float delta = 0;
@@ -117,12 +110,19 @@ public class Game implements Runnable {
             yellowFishForRemove = yellowFishCheck(yellowFish);
             if (yellowFishForRemove != null) break;
         }
-        if (yellowFishForRemove!= null)
-        yellowFishList.remove(yellowFishForRemove);
+        if (yellowFishForRemove!= null) {
+            yellowFishList.remove(yellowFishForRemove);
+            count++;
+        }
     }
 
     private void render() {
         Window.clear();
+
+        graphics.setColor(Color.BLACK);
+        graphics.setFont(new Font("TimesRoman", Font.BOLD, 20));
+        graphics.drawString("Score: " + count.toString(), 20, 30);
+
         for(SharkFish sharkFish: sharkFishList) {
             sharkFish.render(graphics);
         }
@@ -142,10 +142,10 @@ public class Game implements Runnable {
         int shX = sharkFish.getX();
         int shY = sharkFish.getY();
 
-        if(plX < shX + 64 && plX > shX && plY < shY + 64 && plY > shY ){
-//        if(plX > shX - 34 && plX < shX + 98 && plY > shY - 34 && plY < shY + 98 ){
-            Window.clear();
-            gameOver.render(graphics, plX, plY);
+//        if(plX < shX + 64 && plX > shX && plY < shY + 64 && plY > shY ){
+        if(plX > shX - 14 && plX < shX + 78 && plY > shY - 14 && plY < shY + 78 ){
+         //   Window.clear();
+            gameOver.render(graphics, plX - 64, plY - 64);
             Window.swapBuffers();
             stop();
         }
