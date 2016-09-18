@@ -1,6 +1,6 @@
 package game;
 
-import graphics.Sprite;
+import graphics.FishSprite;
 import input.Input;
 
 import java.awt.*;
@@ -12,25 +12,37 @@ public class Player {
     private static final String LEFT_IMAGE_NAME = "pl64L.png";
     private static final String RIGHT_IMAGE_NAME = "pl64R.png";
 
-    private static final int SPRITE_SIZE = 64;
-
     private enum Heading{LEFT, RIGHT}
 
     private int x;
     private int y;
+
     private int speed;
+    private int size;
+
+    private double scale;
+    private int spriteSize;
+
     private Heading heading;
-    public Sprite sprite;
-    private int index;
+    public FishSprite fishSprite;
     private Map<Heading, Integer> headingMap;
 
-    Player(){
+    private int index;
+
+
+    public Player(){
 
         x = 200;
         y = 200;
+
         speed = 5;
+        size = 2;
+
+        scale = 1;
+        spriteSize = 64;
+
         heading = heading.LEFT;
-        sprite = new Sprite(LEFT_IMAGE_NAME, RIGHT_IMAGE_NAME);
+        fishSprite = new FishSprite(LEFT_IMAGE_NAME, RIGHT_IMAGE_NAME);
         headingMap = new HashMap<Heading, Integer>();
 
         index = 0;
@@ -62,19 +74,24 @@ public class Player {
 
         if (newX < 0) {
             newX = 0;
-        } else if (newX >= Game.WIDTH - SPRITE_SIZE) {
-            newX = Game.WIDTH - SPRITE_SIZE;
+        } else if (newX >= Game.WIDTH - spriteSize) {
+            newX = Game.WIDTH - spriteSize;
         }
 
         if (newY < 0) {
             newY = 0;
-        } else if (newY >= Game.HEIGHT - SPRITE_SIZE) {
-            newY = Game.HEIGHT - SPRITE_SIZE;
+        } else if (newY >= Game.HEIGHT - spriteSize) {
+            newY = Game.HEIGHT - spriteSize;
         }
 
         x = newX;
         y = newY;
+    }
 
+    public void sizeExp(){
+        size *= 2;
+        scale *= 1.25;
+        spriteSize *= scale;
     }
 
     public int getX(){
@@ -85,7 +102,15 @@ public class Player {
         return y;
     }
 
+    public int getSpriteSize(){
+        return spriteSize;
+    }
+
+    public int getSize(){
+        return size;
+    }
+
     public void render(Graphics2D g) {
-        sprite.render(g, x, y, headingMap.get(heading));
+        fishSprite.render(g, x, y, scale, headingMap.get(heading));
     }
 }

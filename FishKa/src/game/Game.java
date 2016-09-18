@@ -1,8 +1,8 @@
 package game;
 
 import java.awt.*;
-import java.util.List;
 
+import graphics.GameSprite;
 import input.Input;
 import window.Window;
 import utils.Time;
@@ -28,7 +28,7 @@ public class Game implements Runnable {
     private FishUpdater fishUpdater;
 
 
-    private GameOver gameOver;
+    private GameSprite gameSprite;
 
     public Game() {
         running = false;
@@ -36,13 +36,14 @@ public class Game implements Runnable {
         graphics = Window.getGraphics();
 
         input = new Input() ;
-        gameOver = new GameOver();
+        gameSprite = new GameSprite();
 
         Window.addInputListener(input);
 
         player = new Player();
-        fishUpdater = new FishUpdater(player);
+        fishUpdater = new FishUpdater(player, this);
     }
+
 
 
     public synchronized void start() {
@@ -64,15 +65,22 @@ public class Game implements Runnable {
         running = false;
     }
 
+    public void gameWin(){
+        render();
+        gameSprite.renderGameWin(graphics);
+        Window.swapBuffers();
+        stop();
+    }
+
+    public void gameOver(){
+        gameSprite.renderGameOver(graphics, player.getX() - 64, player.getY() - 64);
+        Window.swapBuffers();
+        stop();
+    }
 
     private void update() {
         player.update(input);
-        if (fishUpdater.update()){
-            gameOver.render(graphics, player.getX() - 64, player.getY() - 64);
-            Window.swapBuffers();
-            stop();
-        }
-
+        fishUpdater.update();
     }
 
     private void render() {

@@ -1,6 +1,6 @@
 package game;
 
-import graphics.Sprite;
+import graphics.FishSprite;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -18,8 +18,9 @@ public class YellowFish implements Fish {
     private int x;
     private int y;
     private int speed;
+    private int size;
     private Heading heading;
-    private Sprite sprite;
+    private FishSprite fishSprite;
     private int index;
     private Map<Heading, Integer> headingMap;
     private Integer direction;
@@ -27,10 +28,14 @@ public class YellowFish implements Fish {
     public YellowFish(int x, int y) {
         this.x = x;
         this.y = y;
-        speed = 3;
+
+        speed = 1;
+        size = 1;
+
         heading = heading.RIGHT;
-        sprite = new Sprite(LEFT_IMAGE_NAME, RIGHT_IMAGE_NAME);
+        fishSprite = new FishSprite(LEFT_IMAGE_NAME, RIGHT_IMAGE_NAME);
         headingMap = new HashMap<Heading, Integer>();
+
         direction = 0;
 
         index = 0;
@@ -48,6 +53,11 @@ public class YellowFish implements Fish {
     @Override
     public int getY() {
         return y;
+    }
+
+    @Override
+    public int getSize() {
+        return size;
     }
 
     @Override
@@ -116,6 +126,6 @@ public class YellowFish implements Fish {
 
     @Override
     public void render(Graphics2D g) {
-        sprite.render(g, x, y, headingMap.get(heading));
+        fishSprite.render(g, x, y, 1, headingMap.get(heading));
     }
 }

@@ -1,16 +1,18 @@
 package game;
 
+
 import graphics.FishSprite;
 
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SharkFish implements Fish{
-    private static final String LEFT_IMAGE_NAME = "sh128L.png";
-    private static final String RIGHT_IMAGE_NAME = "sh128R.png";
+public class GreenFish implements Fish{
 
-    private static final int SPRITE_SIZE = 128;
+    private static final String LEFT_IMAGE_NAME = "gr80L.png";
+    private static final String RIGHT_IMAGE_NAME = "gr80R.png";
+
+    private static final int SPRITE_SIZE = 80;
 
     private enum Heading{LEFT, RIGHT}
 
@@ -28,12 +30,12 @@ public class SharkFish implements Fish{
 
     private Integer direction;
 
-    public SharkFish(int x, int y){
+    public GreenFish(int x, int y){
         this.x = x;
         this.y = y;
 
         speed = 2;
-        size = 8;
+        size = 4;
 
         heading = heading.LEFT;
         fishSprite = new FishSprite(LEFT_IMAGE_NAME, RIGHT_IMAGE_NAME);
@@ -60,7 +62,6 @@ public class SharkFish implements Fish{
         return y;
     }
 
-    @Override
     public int getSize() {
         return size;
     }
