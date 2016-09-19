@@ -4,6 +4,7 @@ import java.awt.*;
 
 import graphics.GameSprite;
 import input.Input;
+import utils.LevelReader;
 import window.Window;
 import utils.Time;
 
@@ -26,7 +27,10 @@ public class Game implements Runnable {
 
     private Player player;
     private FishUpdater fishUpdater;
+    private LevelReader levelReader;
 
+    private int scoreReq;
+    private int scoreWin;
 
     private GameSprite gameSprite;
 
@@ -41,10 +45,13 @@ public class Game implements Runnable {
         Window.addInputListener(input);
 
         player = new Player();
-        fishUpdater = new FishUpdater(player, this);
+
+        levelReader = new LevelReader();
+        fishUpdater = new FishUpdater(player, this, levelReader);
+
+        scoreWin = levelReader.getScoreWin();
+        scoreReq = levelReader.getScoreReq();
     }
-
-
 
     public synchronized void start() {
 
@@ -65,14 +72,25 @@ public class Game implements Runnable {
         running = false;
     }
 
-    public void gameWin(){
+    public void gameWin() {
         render();
         gameSprite.renderGameWin(graphics);
         Window.swapBuffers();
-        stop();
+
+        try {
+            gameThread.sleep(5000);
+        }catch (InterruptedException e){
+            e.printStackTrace();
+        }
+
+        levelReader.nextLevel();
+        scoreWin = levelReader.getScoreWin();
+        scoreReq = levelReader.getScoreReq();
+
+        fishUpdater.initFishUpdater();
     }
 
-    public void gameOver(){
+    public void gameOver() {
         gameSprite.renderGameOver(graphics, player.getX() - 64, player.getY() - 64);
         Window.swapBuffers();
         stop();
@@ -81,6 +99,15 @@ public class Game implements Runnable {
     private void update() {
         player.update(input);
         fishUpdater.update();
+
+        if(fishUpdater.getScore() >= scoreReq){
+            player.sizeExp();
+            scoreReq *= 4;
+        }
+
+        if(fishUpdater.getScore() >= scoreWin){
+            gameWin();
+        }
     }
 
     private void render() {

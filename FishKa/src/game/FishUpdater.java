@@ -1,64 +1,88 @@
 package game;
 
+import utils.LevelReader;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class FishUpdater {
 
-    Player player;
-    Game game;
+    private Player player;
+    private Game game;
+    private LevelReader levelReader;
+
 
     private List<SharkFish> sharkFishList;
     private List<YellowFish> yellowFishList;
     private List<GreenFish> greenFishList;
 
-    int delta;
-    int beta;
-    int alpha;
-    int gamma;
+    private int delta;
+    private int beta;
+    private int alpha;
+    private int gamma;
 
-    int score;
-    int scoreReq;
+    private int score;
 
-    public FishUpdater(Player player, Game game){
+    private int speedYellow;
+    private int speedGreen;
+    private int speedShark;
+
+    private int amountYellow;
+    private int amountGreen;
+    private int amountShark;
+
+
+    public FishUpdater(Player player, Game game, LevelReader levelReader){
 
         this.player = player;
         this.game = game;
 
+        this.levelReader = levelReader;
+        initFishUpdater();
+    }
+
+    public void initFishUpdater(){
         delta = 0;
         beta = 0;
         alpha = 0;
         gamma = 0;
 
         score = 0;
-        scoreReq = 20;
+
+        speedYellow = levelReader.getSpeedYellow();
+        speedGreen = levelReader.getSpeedGreen();
+        speedShark = levelReader.getSpeedShark();
+
+        amountYellow = levelReader.getAmountYellow();
+        amountGreen = levelReader.getAmountGreen();
+        amountShark = levelReader.getAmountShark();
 
         sharkFishList = new ArrayList<SharkFish>();
-        for (int i = 0; i < 3; i++){
+        for (int i = 0; i < amountShark; i++){
             delta++;
-            sharkFishList.add(new SharkFish(getRandomNumber(0, 1000 - 128),getRandomNumber(0, 800 - 128)));
+            sharkFishList.add(new SharkFish(getRandomNumber(70, 1000 - 128),getRandomNumber(0, 800 - 128), speedShark));
         }
 
         yellowFishList = new ArrayList<YellowFish>();
-        for(int i = 0; i < 15; i++){
+        for(int i = 0; i < amountYellow; i++){
             beta++;
-            yellowFishList.add(new YellowFish(getRandomNumber(0, 1000 - 48), getRandomNumber(0, 800 - 48)));
+            yellowFishList.add(new YellowFish(getRandomNumber(70, 1000 - 48), getRandomNumber(0, 800 - 48), speedYellow));
         }
 
         greenFishList = new ArrayList<GreenFish>();
-        for(int i = 0; i < 5; i++){
+        for(int i = 0; i < amountGreen; i++){
             alpha++;
-            greenFishList.add(new GreenFish(getRandomNumber(0, 1000 - 48), getRandomNumber(0, 800 - 48)));
+            greenFishList.add(new GreenFish(getRandomNumber(70, 1000 - 48), getRandomNumber(0, 800 - 48), speedGreen));
         }
     }
 
     public YellowFish generateYellowFish( ){
-        return new YellowFish(getRandomNumber(0, 1000 - 48) , getRandomNumber(0, 800 - 48));
+        return new YellowFish(getRandomNumber(0, 1000 - 48) , getRandomNumber(0, 800 - 48), speedYellow);
     }
 
     public GreenFish generateGreenFish(){
-        return new GreenFish(getRandomNumber(0, 1000 - 80), getRandomNumber(0, 800 - 48));
+        return new GreenFish(getRandomNumber(0, 1000 - 80), getRandomNumber(0, 800 - 48), speedGreen);
     }
 
     public int getRandomNumber(int min, int max){
@@ -115,15 +139,12 @@ public class FishUpdater {
             greenFishList.remove(greenFishForRemove);
         }
 
-        if(score >= scoreReq){
-            player.sizeExp();
-            scoreReq *= 4;
-        }
+
 
         gamma++;
         if (gamma > 30){
-            if(greenFishList.size() < 5) greenFishList.add(generateGreenFish());
-            if(yellowFishList.size() < 15) yellowFishList.add(generateYellowFish());
+            if(greenFishList.size() < amountGreen) greenFishList.add(generateGreenFish());
+            if(yellowFishList.size() < amountYellow) yellowFishList.add(generateYellowFish());
             gamma = 0;
         }
 

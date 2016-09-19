@@ -25,11 +25,12 @@ public class YellowFish implements Fish {
     private Map<Heading, Integer> headingMap;
     private Integer direction;
 
-    public YellowFish(int x, int y) {
+    public YellowFish(int x, int y, int speed) {
         this.x = x;
         this.y = y;
 
-        speed = 1;
+        this.speed = speed;
+
         size = 1;
 
         heading = heading.RIGHT;

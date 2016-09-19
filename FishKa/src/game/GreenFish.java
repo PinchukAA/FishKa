@@ -30,11 +30,11 @@ public class GreenFish implements Fish{
 
     private Integer direction;
 
-    public GreenFish(int x, int y){
+    public GreenFish(int x, int y, int speed){
         this.x = x;
         this.y = y;
+        this.speed = speed;
 
-        speed = 2;
         size = 4;
 
         heading = heading.LEFT;

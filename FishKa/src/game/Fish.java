@@ -9,6 +9,7 @@ public interface Fish {
     int getSize();
 
     void chooseDirection();
+
     void update();
     void render(Graphics2D g);
 }

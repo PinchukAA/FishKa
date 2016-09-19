@@ -32,8 +32,8 @@ public class Player {
 
     public Player(){
 
-        x = 200;
-        y = 200;
+        x = 0;
+        y = 350;
 
         speed = 5;
         size = 2;
