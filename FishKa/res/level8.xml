@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Level>
+    <scoreWin>10</scoreWin>
+    <yellowSpeed>5</yellowSpeed>
+    <yellowNum>1</yellowNum>
+    <greenSpeed>3</greenSpeed>
+    <greenNum>15</greenNum>
+    <sharkSpeed>0</sharkSpeed>
+    <sharkNum>0</sharkNum>
+</Level>

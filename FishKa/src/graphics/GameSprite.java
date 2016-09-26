@@ -20,7 +20,6 @@ public class GameSprite {
         gameOverImage = ResourceLoader.loadImage(GAME_OVER_IMAGE_NAME);
         againImage = ResourceLoader.loadImage(AGAIN_IMAGE_NAME);
         deathImage = ResourceLoader.loadImage(DEATH_IMAGE_NAME);
-
     }
 
     public void renderGameOver(Graphics2D g, int x, int y){
@@ -30,6 +29,6 @@ public class GameSprite {
     }
 
     public void renderGameWin(Graphics2D g){
-        g.drawImage(winImage, 450, 250, winImage.getWidth(), winImage.getHeight(), null);
+        g.drawImage(winImage, 440, 250, winImage.getWidth(), winImage.getHeight(), null);
     }
 }

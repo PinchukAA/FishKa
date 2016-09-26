@@ -9,8 +9,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Player {
-    private static final String LEFT_IMAGE_NAME = "pl64L.png";
-    private static final String RIGHT_IMAGE_NAME = "pl64R.png";
 
     private enum Heading{LEFT, RIGHT}
 
@@ -31,8 +29,7 @@ public class Player {
 
 
     public Player(){
-
-        x = 0;
+        x = 350;
         y = 350;
 
         speed = 5;
@@ -42,7 +39,7 @@ public class Player {
         spriteSize = 64;
 
         heading = heading.LEFT;
-        fishSprite = new FishSprite(LEFT_IMAGE_NAME, RIGHT_IMAGE_NAME);
+        fishSprite = new FishSprite(Constants.PLAYER_LEFT_IMAGE_NAME, Constants.PLAYER_RIGHT_IMAGE_NAME);
         headingMap = new HashMap<Heading, Integer>();
 
         index = 0;
@@ -74,14 +71,14 @@ public class Player {
 
         if (newX < 0) {
             newX = 0;
-        } else if (newX >= Game.WIDTH - spriteSize) {
-            newX = Game.WIDTH - spriteSize;
+        } else if (newX >= Constants.WIDTH - spriteSize) {
+            newX = Constants.WIDTH - spriteSize;
         }
 
         if (newY < 0) {
             newY = 0;
-        } else if (newY >= Game.HEIGHT - spriteSize) {
-            newY = Game.HEIGHT - spriteSize;
+        } else if (newY >= Constants.HEIGHT - spriteSize) {
+            newY = Constants.HEIGHT - spriteSize;
         }
 
         x = newX;
@@ -90,8 +87,16 @@ public class Player {
 
     public void sizeExp(){
         size *= 2;
-        scale *= 1.25;
-        spriteSize *= scale;
+        scale *= 1.4;
+        spriteSize *= (int) scale;
+    }
+
+    public void resetSize(){
+        x = 350;
+        y = 350;
+        size = 2;
+        spriteSize = 64;
+        scale = 1;
     }
 
     public int getX(){

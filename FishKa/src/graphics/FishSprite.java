@@ -15,6 +15,11 @@ public class FishSprite {
         rightImage = ResourceLoader.loadImage(RIGHT_IMAGE_NAME);
     }
 
+    public void setSprite(String LEFT_IMAGE_NAME, String RIGHT_IMAGE_NAME){
+        leftImage = ResourceLoader.loadImage(LEFT_IMAGE_NAME);
+        rightImage = ResourceLoader.loadImage(RIGHT_IMAGE_NAME);
+    }
+
     public void render(Graphics2D g, int x, int y, double scale, int i) {
 
         switch (i){

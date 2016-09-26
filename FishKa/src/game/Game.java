@@ -4,21 +4,12 @@ import java.awt.*;
 
 import graphics.GameSprite;
 import input.Input;
+import utils.Level;
 import utils.LevelReader;
 import window.Window;
 import utils.Time;
 
 public class Game implements Runnable {
-
-    public static final int	WIDTH = 1200;
-    public static final int	HEIGHT = 800;
-    public static final String TITLE = "FishKa";
-    public static final int	CLEAR_COLOR = 0xFF66CCFF;
-    public static final int	NUM_BUFFERS	= 3;
-
-    public static final float UPDATE_RATE = 60.0f;
-    public static final float UPDATE_INTERVAL = Time.SECOND / UPDATE_RATE;
-    public static final long IDLE_TIME = 1;
 
     private boolean running;
     private Thread gameThread;
@@ -29,17 +20,16 @@ public class Game implements Runnable {
     private FishUpdater fishUpdater;
     private LevelReader levelReader;
 
-    private int scoreReq;
-    private int scoreWin;
-
     private GameSprite gameSprite;
 
     public Game() {
         running = false;
-        Window.create(WIDTH, HEIGHT, TITLE, CLEAR_COLOR, NUM_BUFFERS);
+        Window.create(Constants.WIDTH, Constants.HEIGHT, Constants.TITLE, Constants.CLEAR_COLOR, Constants.NUM_BUFFERS);
         graphics = Window.getGraphics();
+        graphics.setColor(Color.BLACK);
+        graphics.setFont(new Font("TimesRoman", Font.BOLD, 20));
 
-        input = new Input() ;
+        input = new Input();
         gameSprite = new GameSprite();
 
         Window.addInputListener(input);
@@ -48,9 +38,6 @@ public class Game implements Runnable {
 
         levelReader = new LevelReader();
         fishUpdater = new FishUpdater(player, this, levelReader);
-
-        scoreWin = levelReader.getScoreWin();
-        scoreReq = levelReader.getScoreReq();
     }
 
     public synchronized void start() {
@@ -61,7 +48,6 @@ public class Game implements Runnable {
         running = true;
         gameThread = new Thread(this);
         gameThread.start();
-
     }
 
     public synchronized void stop() {
@@ -73,49 +59,48 @@ public class Game implements Runnable {
     }
 
     public void gameWin() {
-        render();
+        Window.clear();
         gameSprite.renderGameWin(graphics);
+        graphics.drawString("Score: " + fishUpdater.getScore() + " / " + fishUpdater.getScoreWin(), 20, 30);
         Window.swapBuffers();
 
-        try {
-            gameThread.sleep(5000);
-        }catch (InterruptedException e){
-            e.printStackTrace();
-        }
-
-        levelReader.nextLevel();
-        scoreWin = levelReader.getScoreWin();
-        scoreReq = levelReader.getScoreReq();
-
-        fishUpdater.initFishUpdater();
+        nextLevel();
     }
 
     public void gameOver() {
-        gameSprite.renderGameOver(graphics, player.getX() - 64, player.getY() - 64);
+        gameSprite.renderGameOver(graphics, player.getX() - player.getSpriteSize(), player.getY() - player.getSpriteSize());
         Window.swapBuffers();
         stop();
+    }
+
+    public void nextLevel(){
+        Window.swapBuffers();
+        pauseGame();
+
+        running = false;
+        levelReader.nextLevel();
+        fishUpdater.initFishUpdater();
+        player.resetSize();
+
+        running = true;
+
+    }
+
+    public void pauseGame(){
+        long lastTime = Time.get();
+        while (Time.get() < lastTime + 2000000000l)
+            running = false;
+        running = true;
     }
 
     private void update() {
         player.update(input);
         fishUpdater.update();
-
-        if(fishUpdater.getScore() >= scoreReq){
-            player.sizeExp();
-            scoreReq *= 4;
-        }
-
-        if(fishUpdater.getScore() >= scoreWin){
-            gameWin();
-        }
     }
 
     private void render() {
         Window.clear();
-
-        graphics.setColor(Color.BLACK);
-        graphics.setFont(new Font("TimesRoman", Font.BOLD, 20));
-        graphics.drawString("Score: " + fishUpdater.getScore().toString(), 20, 30);
+        graphics.drawString("Score: " + fishUpdater.getScore() + " / " + fishUpdater.getScoreWin(), 20, 30);
 
         player.render(graphics);
         fishUpdater.render(graphics);
@@ -142,7 +127,7 @@ public class Game implements Runnable {
             count += elapsedTime;
 
             boolean render = false;
-            delta += (elapsedTime / UPDATE_INTERVAL);
+            delta += (elapsedTime / Constants.UPDATE_INTERVAL);
             while (delta > 1) {
                 update();
                 upd++;
@@ -159,14 +144,14 @@ public class Game implements Runnable {
                 fps++;
             } else {
                 try {
-                    Thread.sleep(IDLE_TIME);
+                    Thread.sleep(Constants.IDLE_TIME);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
 
             if (count >= Time.SECOND) {
-                Window.setTitle(TITLE + " || Fps: " + fps + " | Upd: " + upd + " | Updl: " + updl);
+                Window.setTitle(Constants.TITLE + " || Fps: " + fps + " | Upd: " + upd + " | Updl: " + updl);
                 upd = 0;
                 fps = 0;
                 updl = 0;
