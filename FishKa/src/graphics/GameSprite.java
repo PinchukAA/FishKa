@@ -23,7 +23,7 @@ public class GameSprite {
     }
 
     public void renderGameOver(Graphics2D g, int x, int y){
-        g.drawImage(deathImage, x, y, deathImage.getWidth(), deathImage.getHeight(), null);
+ //       g.drawImage(deathImage, x, y, deathImage.getWidth(), deathImage.getHeight(), null);
         g.drawImage(gameOverImage, 500, 300, gameOverImage.getWidth(), gameOverImage.getHeight(), null);
 
     }

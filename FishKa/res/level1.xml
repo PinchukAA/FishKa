@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Level>
-    <scoreWin>16</scoreWin>
+    <scoreWin>30</scoreWin>
     <yellowSpeed>1</yellowSpeed>
     <yellowNum>25</yellowNum>
-    <greenSpeed>0</greenSpeed>
-    <greenNum>0</greenNum>
-    <sharkSpeed>0</sharkSpeed>
-    <sharkNum>0</sharkNum>
+    <greenSpeed>2</greenSpeed>
+    <greenNum>3</greenNum>
+    <sharkSpeed>3</sharkSpeed>
+    <sharkNum>2</sharkNum>
 </Level>

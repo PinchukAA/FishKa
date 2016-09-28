@@ -73,6 +73,8 @@ public class FishUpdater {
         Iterator<Fish> iteratorFish = fishList.iterator();
         while (iteratorFish.hasNext()){
             Fish fish = iteratorFish.next();
+            if(!player.isGrow())
+                if(fish.getType() == Constants.SHARK_TYPE ) continue;
 
             delta++;
             if (delta > 70){
@@ -106,8 +108,6 @@ public class FishUpdater {
                 }
                 iteratorFish.remove();
             }
-
-            checker.checkScore(score);
         }
 
         gamma++;
@@ -123,13 +123,30 @@ public class FishUpdater {
             gamma = 0;
         }
 
+        checker.checkScore(score);
     }
 
     public void render(Graphics2D graphics){
         for(Fish fish: fishList){
+            if(!player.isGrow())
+                if(fish.getType() == Constants.SHARK_TYPE ) {
+                    if(checker.getScoreReq() <= score + 3 && checker.getScoreReq() >= score)
+                        renderSharkWarning(graphics, fish);
+                    continue;
+                }
+
             fish.render(graphics);
         }
 
+    }
+
+    public void renderSharkWarning(Graphics2D graphics, Fish fish){
+        Color color = new Color(128, 56, 54, 150);
+        graphics.setColor(color);
+        graphics.fillRect(fish.getX(), fish.getY(), Constants.SHARK_SPRITE_SIZE, Constants.SHARK_SPRITE_SIZE);
+
+        graphics.setFont(new Font("TimesRoman", Font.BOLD, 40));
+        graphics.drawString("SHARKS ARE COMING!!!", 380, 380);
     }
 
 

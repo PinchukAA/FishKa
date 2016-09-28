@@ -52,12 +52,12 @@ public class Fish {
                 spriteSize = Constants.YELLOW_SPRITE_SIZE;
                 break;
             case 1:
-                size = 4;
+                size = 2;
                 fishSprite = new FishSprite(Constants.GREEN_LEFT_IMAGE_NAME, Constants.GREEN_RIGHT_IMAGE_NAME);
                 spriteSize = Constants.GREEN_SPRITE_SIZE;
                 break;
             case 2:
-                size = 8;
+                size = 3;
                 fishSprite = new FishSprite(Constants.SHARK_LEFT_IMAGE_NAME, Constants.SHARK_RIGHT_IMAGE_NAME);
                 spriteSize = Constants.SHARK_SPRITE_SIZE;
                 break;
@@ -149,7 +149,7 @@ public class Fish {
     }
 
     public void render(Graphics2D g) {
-        fishSprite.render(g, x, y, Constants.FISH_SCALE, headingMap.get(heading));
+        fishSprite.render(g, x, y, headingMap.get(heading));
     }
 
 }

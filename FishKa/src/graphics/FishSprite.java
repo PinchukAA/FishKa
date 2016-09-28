@@ -20,14 +20,14 @@ public class FishSprite {
         rightImage = ResourceLoader.loadImage(RIGHT_IMAGE_NAME);
     }
 
-    public void render(Graphics2D g, int x, int y, double scale, int i) {
+    public void render(Graphics2D g, int x, int y, int i) {
 
         switch (i){
             case 0:
-                g.drawImage(leftImage, x, y, (int)(leftImage.getWidth() * scale), (int)(leftImage.getHeight() * scale), null);
+                g.drawImage(leftImage, x, y, leftImage.getWidth(),  leftImage.getHeight(), null);
                 break;
             case 1:
-                g.drawImage(rightImage, x, y, (int)(rightImage.getWidth() * scale), (int)(rightImage.getHeight() * scale), null);
+                g.drawImage(rightImage, x, y, rightImage.getWidth(), rightImage.getHeight(), null);
                 break;
         }
     }

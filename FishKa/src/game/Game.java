@@ -4,7 +4,6 @@ import java.awt.*;
 
 import graphics.GameSprite;
 import input.Input;
-import utils.Level;
 import utils.LevelReader;
 import window.Window;
 import utils.Time;
@@ -26,8 +25,6 @@ public class Game implements Runnable {
         running = false;
         Window.create(Constants.WIDTH, Constants.HEIGHT, Constants.TITLE, Constants.CLEAR_COLOR, Constants.NUM_BUFFERS);
         graphics = Window.getGraphics();
-        graphics.setColor(Color.BLACK);
-        graphics.setFont(new Font("TimesRoman", Font.BOLD, 20));
 
         input = new Input();
         gameSprite = new GameSprite();
@@ -59,9 +56,10 @@ public class Game implements Runnable {
     }
 
     public void gameWin() {
+        running = false;
         Window.clear();
         gameSprite.renderGameWin(graphics);
-        graphics.drawString("Score: " + fishUpdater.getScore() + " / " + fishUpdater.getScoreWin(), 20, 30);
+        scoreRender();
         Window.swapBuffers();
 
         nextLevel();
@@ -75,15 +73,12 @@ public class Game implements Runnable {
 
     public void nextLevel(){
         Window.swapBuffers();
-        pauseGame();
 
-        running = false;
+        player.initPlayer();
         levelReader.nextLevel();
         fishUpdater.initFishUpdater();
-        player.resetSize();
 
-        running = true;
-
+        pauseGame();
     }
 
     public void pauseGame(){
@@ -100,12 +95,19 @@ public class Game implements Runnable {
 
     private void render() {
         Window.clear();
-        graphics.drawString("Score: " + fishUpdater.getScore() + " / " + fishUpdater.getScoreWin(), 20, 30);
+
+        scoreRender();
 
         player.render(graphics);
         fishUpdater.render(graphics);
 
         Window.swapBuffers();
+    }
+
+    private void scoreRender(){
+        graphics.setFont(new Font("TimesRoman", Font.BOLD, 20));
+        graphics.setColor(Color.BLACK);
+        graphics.drawString("Score: " + fishUpdater.getScore() + " / " + fishUpdater.getScoreWin(), 20, 30);
     }
 
     public void run() {

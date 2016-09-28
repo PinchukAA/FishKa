@@ -45,9 +45,11 @@ public class FishFactory {
         int playerX = player.getX();
         int playerSpriteSize = player.getSpriteSize();
 
-        int x = generateRandomNumber(0, Constants.WIDTH - fishSpriteSize);
-        while (x < playerX + playerSpriteSize * 2 && playerX + playerSpriteSize * 2 < x + fishSpriteSize * 2) x = generateRandomNumber(0, Constants.WIDTH - fishSpriteSize);
+        int playerCenter = playerX + (int) playerSpriteSize / 2;
 
+        int x = generateRandomNumber(0, Constants.WIDTH - fishSpriteSize);
+
+        while (Math.abs(x + fishSpriteSize / 2 - playerCenter) < 100)  x = generateRandomNumber(0, Constants.WIDTH - fishSpriteSize);
         return x;
     }
 
@@ -55,9 +57,11 @@ public class FishFactory {
         int playerY = player.getY();
         int playerSpriteSize = player.getSpriteSize();
 
-        int y = generateRandomNumber(0, Constants.HEIGHT - fishSpriteSize);
-        while (y < playerY + playerSpriteSize * 2 && playerY + playerSpriteSize * 2 < y + fishSpriteSize * 2) y = generateRandomNumber(0, Constants.HEIGHT - fishSpriteSize);
+        int playerCenter = playerY + (int) playerSpriteSize / 2;
 
+        int y = generateRandomNumber(0, Constants.HEIGHT - fishSpriteSize);
+
+        while (Math.abs(y + fishSpriteSize / 2 - playerCenter) < 100)  y = generateRandomNumber(0, Constants.HEIGHT - fishSpriteSize);
         return y;
     }
 

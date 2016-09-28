@@ -1,7 +1,5 @@
 package game;
 
-import window.Window;
-
 import java.util.Iterator;
 import java.util.List;
 
@@ -37,13 +35,13 @@ public class Checker {
                     && playerY < fishY + fishSpriteSize / 2
                     && fishY + fishSpriteSize / 2 < playerY + playerSpriteSize)
                 return true;
-        } else {
-            if(fishX < playerX + playerSpriteSize / 2
+        } else if(fishX < playerX + playerSpriteSize / 2
                     && playerX + playerSpriteSize / 2 < fishX + fishSpriteSize
                     && fishY < playerY + playerSpriteSize / 2
-                    && playerY + playerSpriteSize / 2 < fishY + fishSpriteSize)
+                    && playerY + playerSpriteSize / 2 < fishY + fishSpriteSize) {
+                System.out.print(" fX " + fishX +" fY "+ fishY + " plX " + playerX + " plY " + playerY + " type " + fish.getType());
                 game.gameOver();
-        }
+            }
         return false;
     }
 
@@ -55,6 +53,9 @@ public class Checker {
         Iterator<Fish> iteratorFish = fishList.iterator();
         while (iteratorFish.hasNext()){
             Fish fishFromList = iteratorFish.next();
+
+            if(!player.isGrow())
+                if (fishFromList.getType() == Constants.SHARK_TYPE) continue;
 
             int fishFromListX = fishFromList.getX();
             int fishFromListY = fishFromList.getY();
@@ -71,14 +72,22 @@ public class Checker {
         return false;
     }
 
+
+    public int getScoreReq(){
+        return scoreReq;
+    }
+
+    boolean f = true;
     public void checkScore(int score){
         if(score >= scoreWin){
             game.gameWin();
+            return;
         }
 
-        if(score >= scoreReq){
-            player.sizeExp();
-            scoreReq *= 4;
+        if(score >= scoreReq && f){
+            player.grow();
+            f = false;
+ //           scoreReq *= 4;
         }
     }
 }

@@ -35,8 +35,10 @@ public class Constants {
     public static final int SHARK_SPRITE_SIZE = 128;
     public static final double FISH_SCALE = 1;
 
-    public static final String PLAYER_LEFT_IMAGE_NAME = "pl64L.png";
-    public static final String PLAYER_RIGHT_IMAGE_NAME = "pl64R.png";
+    public static final String PLAYER_LEFT_IMAGE_NAME_64 = "pl64L.png";
+    public static final String PLAYER_RIGHT_IMAGE_NAME_64 = "pl64R.png";
+    public static final String PLAYER_LEFT_IMAGE_NAME_96 = "pl96L.png";
+    public static final String PLAYER_RIGHT_IMAGE_NAME_96 = "pl96R.png";
 
     public static final int UP = 0;
     public static final int DOWN = 1;

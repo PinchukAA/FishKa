@@ -18,7 +18,8 @@ public class Player {
     private int speed;
     private int size;
 
-    private double scale;
+    private boolean isGrow;
+
     private int spriteSize;
 
     private Heading heading;
@@ -29,17 +30,8 @@ public class Player {
 
 
     public Player(){
-        x = 350;
-        y = 350;
-
-        speed = 5;
-        size = 2;
-
-        scale = 1;
-        spriteSize = 64;
-
         heading = heading.LEFT;
-        fishSprite = new FishSprite(Constants.PLAYER_LEFT_IMAGE_NAME, Constants.PLAYER_RIGHT_IMAGE_NAME);
+        fishSprite = new FishSprite(Constants.PLAYER_LEFT_IMAGE_NAME_64, Constants.PLAYER_RIGHT_IMAGE_NAME_64);
         headingMap = new HashMap<Heading, Integer>();
 
         index = 0;
@@ -47,7 +39,22 @@ public class Player {
             headingMap.put(h, index);
             index++;
         }
+
+        initPlayer();
     }
+
+    public void initPlayer(){
+        isGrow = false;
+
+        x = 350;
+        y = 350;
+        size = 1;
+        speed = 5;
+        spriteSize = 64;
+
+        fishSprite.setSprite(Constants.PLAYER_LEFT_IMAGE_NAME_64, Constants.PLAYER_RIGHT_IMAGE_NAME_64);
+    }
+
 
     public void update(Input input) {
 
@@ -85,18 +92,17 @@ public class Player {
         y = newY;
     }
 
-    public void sizeExp(){
-        size *= 2;
-        scale *= 1.4;
-        spriteSize *= (int) scale;
+    public void grow(){
+        isGrow = true;
+
+        size++;
+        spriteSize = 96;
+        fishSprite.setSprite(Constants.PLAYER_LEFT_IMAGE_NAME_96, Constants.PLAYER_RIGHT_IMAGE_NAME_96);
     }
 
-    public void resetSize(){
-        x = 350;
-        y = 350;
-        size = 2;
-        spriteSize = 64;
-        scale = 1;
+
+    public boolean isGrow(){
+        return isGrow;
     }
 
     public int getX(){
@@ -116,6 +122,6 @@ public class Player {
     }
 
     public void render(Graphics2D g) {
-        fishSprite.render(g, x, y, scale, headingMap.get(heading));
+        fishSprite.render(g, x, y, headingMap.get(heading));
     }
 }
