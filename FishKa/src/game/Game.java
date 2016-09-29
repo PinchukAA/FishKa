@@ -33,7 +33,7 @@ public class Game implements Runnable {
 
         player = new Player();
 
-        levelReader = new LevelReader();
+        levelReader = new LevelReader(this);
         fishUpdater = new FishUpdater(player, this, levelReader);
     }
 
@@ -55,10 +55,17 @@ public class Game implements Runnable {
         running = false;
     }
 
-    public void gameWin() {
+    public void gameWin(){
         running = false;
         Window.clear();
         gameSprite.renderGameWin(graphics);
+        Window.swapBuffers();
+    }
+
+    public void levelWin() {
+        running = false;
+        Window.clear();
+        gameSprite.renderLevelWin(graphics);
         scoreRender();
         Window.swapBuffers();
 

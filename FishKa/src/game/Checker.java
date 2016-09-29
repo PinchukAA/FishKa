@@ -9,6 +9,7 @@ public class Checker {
 
     private int scoreWin;
     private int scoreReq;
+    private boolean f;
 
     public Checker(Player player, Game game){
         this.player = player;
@@ -16,6 +17,7 @@ public class Checker {
     }
 
     public void initChecker(int scoreWin){
+        f = true;
         this.scoreWin = scoreWin;
         scoreReq = scoreWin / 2 + 5;
     }
@@ -77,10 +79,9 @@ public class Checker {
         return scoreReq;
     }
 
-    boolean f = true;
     public void checkScore(int score){
         if(score >= scoreWin){
-            game.gameWin();
+            game.levelWin();
             return;
         }
 
