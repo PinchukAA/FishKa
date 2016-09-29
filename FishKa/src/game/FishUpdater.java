@@ -1,5 +1,6 @@
 package game;
 
+import Constants.FishTypeConstants;
 import utils.LevelReader;
 
 import java.awt.*;
@@ -74,7 +75,7 @@ public class FishUpdater {
         while (iteratorFish.hasNext()){
             Fish fish = iteratorFish.next();
             if(!player.isGrow())
-                if(fish.getType() == Constants.SHARK_TYPE ) continue;
+                if(fish.getType() == FishTypeConstants.SHARK_TYPE ) continue;
 
             delta++;
             if (delta > 70){
@@ -88,10 +89,10 @@ public class FishUpdater {
 
                 score += fish.getSize();
                 switch (fish.getType()){
-                    case Constants.YELLOW_TYPE:
+                    case FishTypeConstants.YELLOW_TYPE:
                         curYellowNum--;
                         break;
-                    case Constants.GREEN_TYPE:
+                    case FishTypeConstants.GREEN_TYPE:
                         curGreenNum--;
                         break;
                 }
@@ -99,10 +100,10 @@ public class FishUpdater {
 
             } else if(checker.checkFish(fish, fishList)){
                 switch (fish.getType()){
-                    case Constants.YELLOW_TYPE:
+                    case FishTypeConstants.YELLOW_TYPE:
                         curYellowNum--;
                         break;
-                    case Constants.GREEN_TYPE:
+                    case FishTypeConstants.GREEN_TYPE:
                         curGreenNum--;
                         break;
                 }
@@ -129,7 +130,7 @@ public class FishUpdater {
     public void render(Graphics2D graphics){
         for(Fish fish: fishList){
             if(!player.isGrow())
-                if(fish.getType() == Constants.SHARK_TYPE ) {
+                if(fish.getType() == FishTypeConstants.SHARK_TYPE ) {
                     if(checker.getScoreReq() <= score + 3 && checker.getScoreReq() >= score)
                         renderSharkWarning(graphics, fish);
                     continue;
@@ -143,7 +144,7 @@ public class FishUpdater {
     public void renderSharkWarning(Graphics2D graphics, Fish fish){
         Color color = new Color(128, 56, 54, 150);
         graphics.setColor(color);
-        graphics.fillRect(fish.getX(), fish.getY(), Constants.SHARK_SPRITE_SIZE, Constants.SHARK_SPRITE_SIZE);
+        graphics.fillRect(fish.getX(), fish.getY(), FishTypeConstants.SHARK_SPRITE_SIZE, FishTypeConstants.SHARK_SPRITE_SIZE);
 
         graphics.setFont(new Font("TimesRoman", Font.BOLD, 40));
         graphics.drawString("SHARKS ARE COMING!!!", 380, 380);

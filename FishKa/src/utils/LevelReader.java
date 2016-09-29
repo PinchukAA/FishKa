@@ -7,9 +7,8 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
 
+import Constants.ResourceConstants;
 public class LevelReader {
-    private static String FILE_PATH = "res/";
-    private static String FILE_NAME = "level";
 
     public Game game;
 
@@ -29,7 +28,7 @@ public class LevelReader {
             JAXBContext jaxbContext = JAXBContext.newInstance(Level.class);
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
             try {
-                XMLFile = new File(FILE_PATH + FILE_NAME + levelNumber + ".xml");
+                XMLFile = new File(ResourceConstants.PATH + ResourceConstants.FILE_NAME + levelNumber + ".xml");
             }catch (Exception e){
                 game.gameWin();
                 e.printStackTrace();

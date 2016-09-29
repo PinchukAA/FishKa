@@ -1,5 +1,9 @@
 package game;
 
+import Constants.FishTypeConstants;
+import Constants.FishDirectionConstants;
+import Constants.ImageNameConstants;
+import Constants.WindowConstants;
 import graphics.FishSprite;
 
 import java.awt.*;
@@ -48,18 +52,18 @@ public class Fish {
         switch (type){
             case 0:
                 size = 1;
-                fishSprite = new FishSprite(Constants.YELLOW_LEFT_IMAGE_NAME, Constants.YELLOW_RIGHT_IMAGE_NAME);
-                spriteSize = Constants.YELLOW_SPRITE_SIZE;
+                fishSprite = new FishSprite(ImageNameConstants.YELLOW_LEFT_IMAGE_NAME, ImageNameConstants.YELLOW_RIGHT_IMAGE_NAME);
+                spriteSize = FishTypeConstants.YELLOW_SPRITE_SIZE;
                 break;
             case 1:
                 size = 2;
-                fishSprite = new FishSprite(Constants.GREEN_LEFT_IMAGE_NAME, Constants.GREEN_RIGHT_IMAGE_NAME);
-                spriteSize = Constants.GREEN_SPRITE_SIZE;
+                fishSprite = new FishSprite(ImageNameConstants.GREEN_LEFT_IMAGE_NAME, ImageNameConstants.GREEN_RIGHT_IMAGE_NAME);
+                spriteSize = FishTypeConstants.GREEN_SPRITE_SIZE;
                 break;
             case 2:
                 size = 3;
-                fishSprite = new FishSprite(Constants.SHARK_LEFT_IMAGE_NAME, Constants.SHARK_RIGHT_IMAGE_NAME);
-                spriteSize = Constants.SHARK_SPRITE_SIZE;
+                fishSprite = new FishSprite(ImageNameConstants.SHARK_LEFT_IMAGE_NAME, ImageNameConstants.SHARK_RIGHT_IMAGE_NAME);
+                spriteSize = FishTypeConstants.SHARK_SPRITE_SIZE;
                 break;
         }
 
@@ -96,36 +100,36 @@ public class Fish {
         int newY = y;
 
         switch(direction){
-            case Constants.UP:
+            case FishDirectionConstants.UP:
                 newY -= speed;
                 break;
-            case Constants.DOWN:
+            case FishDirectionConstants.DOWN:
                 newY += speed;
                 break;
-            case Constants.LEFT:
+            case FishDirectionConstants.LEFT:
                 newX -= speed;
                 heading = Heading.LEFT;
                 break;
-            case Constants.RIGHT:
+            case FishDirectionConstants.RIGHT:
                 newX += speed;
                 heading = Heading.RIGHT;
                 break;
-            case Constants.UP_LEFT:
+            case FishDirectionConstants.UP_LEFT:
                 newY -= speed;
                 newX -= speed;
                 heading = Heading.LEFT;
                 break;
-            case Constants.UP_RIGHT:
+            case FishDirectionConstants.UP_RIGHT:
                 newY -= speed;
                 newX += speed;
                 heading = Heading.RIGHT;
                 break;
-            case Constants.DOWN_LEFT:
+            case FishDirectionConstants.DOWN_LEFT:
                 newY += speed;
                 newX -= speed;
                 heading = Heading.LEFT;
                 break;
-            case Constants.DOWN_RIGHT:
+            case FishDirectionConstants.DOWN_RIGHT:
                 newY += speed;
                 newX += speed;
                 heading = Heading.RIGHT;
@@ -134,14 +138,14 @@ public class Fish {
 
         if (newX < 0) {
             newX = 0;
-        } else if (newX >= Constants.WIDTH - spriteSize) {
-            newX = Constants.WIDTH - spriteSize;
+        } else if (newX >= WindowConstants.WIDTH - spriteSize) {
+            newX = WindowConstants.WIDTH - spriteSize;
         }
 
         if (newY < 0) {
             newY = 0;
-        } else if (newY >= Constants.HEIGHT - spriteSize) {
-            newY = Constants.HEIGHT - spriteSize;
+        } else if (newY >= WindowConstants.HEIGHT - spriteSize) {
+            newY = WindowConstants.HEIGHT - spriteSize;
         }
 
         x = newX;

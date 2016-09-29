@@ -2,6 +2,7 @@ package game;
 
 import java.awt.*;
 
+import Constants.*;
 import graphics.GameSprite;
 import input.Input;
 import utils.LevelReader;
@@ -23,7 +24,7 @@ public class Game implements Runnable {
 
     public Game() {
         running = false;
-        Window.create(Constants.WIDTH, Constants.HEIGHT, Constants.TITLE, Constants.CLEAR_COLOR, Constants.NUM_BUFFERS);
+        Window.create(WindowConstants.WIDTH, WindowConstants.HEIGHT, WindowConstants.TITLE, WindowConstants.CLEAR_COLOR, WindowConstants.NUM_BUFFERS);
         graphics = Window.getGraphics();
 
         input = new Input();
@@ -136,7 +137,7 @@ public class Game implements Runnable {
             count += elapsedTime;
 
             boolean render = false;
-            delta += (elapsedTime / Constants.UPDATE_INTERVAL);
+            delta += (elapsedTime / TimeConstants.UPDATE_INTERVAL);
             while (delta > 1) {
                 update();
                 upd++;
@@ -153,14 +154,14 @@ public class Game implements Runnable {
                 fps++;
             } else {
                 try {
-                    Thread.sleep(Constants.IDLE_TIME);
+                    Thread.sleep(TimeConstants.IDLE_TIME);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
 
-            if (count >= Time.SECOND) {
-                Window.setTitle(Constants.TITLE + " || Fps: " + fps + " | Upd: " + upd + " | Updl: " + updl);
+            if (count >= TimeConstants.SECOND) {
+                Window.setTitle(WindowConstants.TITLE + " || Fps: " + fps + " | Upd: " + upd + " | Updl: " + updl);
                 upd = 0;
                 fps = 0;
                 updl = 0;

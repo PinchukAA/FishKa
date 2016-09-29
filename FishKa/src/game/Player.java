@@ -1,5 +1,6 @@
 package game;
 
+import Constants.*;
 import graphics.FishSprite;
 import input.Input;
 
@@ -31,7 +32,7 @@ public class Player {
 
     public Player(){
         heading = heading.LEFT;
-        fishSprite = new FishSprite(Constants.PLAYER_LEFT_IMAGE_NAME_64, Constants.PLAYER_RIGHT_IMAGE_NAME_64);
+        fishSprite = new FishSprite(ImageNameConstants.PLAYER_LEFT_IMAGE_NAME_64, ImageNameConstants.PLAYER_RIGHT_IMAGE_NAME_64);
         headingMap = new HashMap<Heading, Integer>();
 
         index = 0;
@@ -52,7 +53,7 @@ public class Player {
         speed = 5;
         spriteSize = 64;
 
-        fishSprite.setSprite(Constants.PLAYER_LEFT_IMAGE_NAME_64, Constants.PLAYER_RIGHT_IMAGE_NAME_64);
+        fishSprite.setSprite(ImageNameConstants.PLAYER_LEFT_IMAGE_NAME_64, ImageNameConstants.PLAYER_RIGHT_IMAGE_NAME_64);
     }
 
 
@@ -78,14 +79,14 @@ public class Player {
 
         if (newX < 0) {
             newX = 0;
-        } else if (newX >= Constants.WIDTH - spriteSize) {
-            newX = Constants.WIDTH - spriteSize;
+        } else if (newX >= WindowConstants.WIDTH - spriteSize) {
+            newX = WindowConstants.WIDTH - spriteSize;
         }
 
         if (newY < 0) {
             newY = 0;
-        } else if (newY >= Constants.HEIGHT - spriteSize) {
-            newY = Constants.HEIGHT - spriteSize;
+        } else if (newY >= WindowConstants.HEIGHT - spriteSize) {
+            newY = WindowConstants.HEIGHT - spriteSize;
         }
 
         x = newX;
@@ -97,7 +98,7 @@ public class Player {
 
         size++;
         spriteSize = 96;
-        fishSprite.setSprite(Constants.PLAYER_LEFT_IMAGE_NAME_96, Constants.PLAYER_RIGHT_IMAGE_NAME_96);
+        fishSprite.setSprite(ImageNameConstants.PLAYER_LEFT_IMAGE_NAME_96, ImageNameConstants.PLAYER_RIGHT_IMAGE_NAME_96);
     }
 
 

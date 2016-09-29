@@ -1,5 +1,7 @@
 package game;
 
+import Constants.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,15 +15,15 @@ public class FishFactory {
     }
 
     public Fish createYellowFish(int speed) {
-        return new Fish(generateX(Constants.YELLOW_SPRITE_SIZE), generateY(Constants.YELLOW_SPRITE_SIZE), speed, Constants.YELLOW_TYPE);
+        return new Fish(generateX(FishTypeConstants.YELLOW_SPRITE_SIZE), generateY(FishTypeConstants.YELLOW_SPRITE_SIZE), speed, FishTypeConstants.YELLOW_TYPE);
     }
 
     public Fish createGreenFish(int speed) {
-        return new Fish(generateX(Constants.GREEN_SPRITE_SIZE), generateY(Constants.GREEN_SPRITE_SIZE), speed, Constants.GREEN_TYPE);
+        return new Fish(generateX(FishTypeConstants.GREEN_SPRITE_SIZE), generateY(FishTypeConstants.GREEN_SPRITE_SIZE), speed, FishTypeConstants.GREEN_TYPE);
     }
 
     public Fish createSharkFish(int speed) {
-        return new Fish(generateX(Constants.SHARK_SPRITE_SIZE), generateY(Constants.SHARK_SPRITE_SIZE), speed, Constants.SHARK_TYPE);
+        return new Fish(generateX(FishTypeConstants.SHARK_SPRITE_SIZE), generateY(FishTypeConstants.SHARK_SPRITE_SIZE), speed, FishTypeConstants.SHARK_TYPE);
     }
 
     public List createFishList(int yellowNum, int yellowSpeed, int greenNum, int greenSpeed, int sharkNum, int sharkSpeed) {
@@ -47,9 +49,9 @@ public class FishFactory {
 
         int playerCenter = playerX + (int) playerSpriteSize / 2;
 
-        int x = generateRandomNumber(0, Constants.WIDTH - fishSpriteSize);
+        int x = generateRandomNumber(0, WindowConstants.WIDTH - fishSpriteSize);
 
-        while (Math.abs(x + fishSpriteSize / 2 - playerCenter) < 100)  x = generateRandomNumber(0, Constants.WIDTH - fishSpriteSize);
+        while (Math.abs(x + fishSpriteSize / 2 - playerCenter) < 100)  x = generateRandomNumber(0, WindowConstants.WIDTH - fishSpriteSize);
         return x;
     }
 
@@ -59,9 +61,9 @@ public class FishFactory {
 
         int playerCenter = playerY + (int) playerSpriteSize / 2;
 
-        int y = generateRandomNumber(0, Constants.HEIGHT - fishSpriteSize);
+        int y = generateRandomNumber(0, WindowConstants.HEIGHT - fishSpriteSize);
 
-        while (Math.abs(y + fishSpriteSize / 2 - playerCenter) < 100)  y = generateRandomNumber(0, Constants.HEIGHT - fishSpriteSize);
+        while (Math.abs(y + fishSpriteSize / 2 - playerCenter) < 100)  y = generateRandomNumber(0, WindowConstants.HEIGHT - fishSpriteSize);
         return y;
     }
 

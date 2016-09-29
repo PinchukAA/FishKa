@@ -1,5 +1,7 @@
 package game;
 
+import Constants.FishTypeConstants;
+
 import java.util.Iterator;
 import java.util.List;
 
@@ -57,7 +59,7 @@ public class Checker {
             Fish fishFromList = iteratorFish.next();
 
             if(!player.isGrow())
-                if (fishFromList.getType() == Constants.SHARK_TYPE) continue;
+                if (fishFromList.getType() == FishTypeConstants.SHARK_TYPE) continue;
 
             int fishFromListX = fishFromList.getX();
             int fishFromListY = fishFromList.getY();
