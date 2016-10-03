@@ -1,12 +1,9 @@
 package input;
 
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.util.Arrays;
-
-import javax.swing.AbstractAction;
-import javax.swing.JComponent;
-import javax.swing.KeyStroke;
 
 public class Input extends JComponent {
 
@@ -35,9 +32,7 @@ public class Input extends JComponent {
                     map[KEY_CODE] = false;
                 }
             });
-
         }
-
     }
 
     public boolean[] getMap() {

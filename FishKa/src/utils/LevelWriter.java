@@ -1,10 +1,11 @@
 package utils;
 
+import constants.ResourceConstants;
+
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import java.io.File;
-import constants.ResourceConstants;
 
 public class LevelWriter {
 

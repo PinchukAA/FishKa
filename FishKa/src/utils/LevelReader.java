@@ -1,5 +1,6 @@
 package utils;
 
+import constants.ResourceConstants;
 import game.Game;
 
 import javax.xml.bind.JAXBContext;
@@ -7,26 +8,14 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
 
-import constants.ResourceConstants;
 public class LevelReader {
 
-    public Game game;
+    public Level level;
 
     public File XMLFile;
     public String fileName;
 
-    public Level level;
-    public int levelNumber;
-    public int numLevels;
-
-    public LevelReader(Game game){
-        this.game = game;
-        levelNumber = 1;
-        numLevels = 2;
-        readLevel();
-    }
-
-    public void readLevel(){
+    public void readLevel(int levelNumber){
         try {
             JAXBContext jaxbContext = JAXBContext.newInstance(Level.class);
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
@@ -41,16 +30,7 @@ public class LevelReader {
         }
     }
 
-    public void nextLevel(){
-        levelNumber++;
-        readLevel();
-    }
-
     public Level getLevel(){
         return level;
-    }
-
-    public int getLevelNumber(){
-        return levelNumber;
     }
 }

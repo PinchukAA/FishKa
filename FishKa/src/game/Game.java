@@ -1,19 +1,24 @@
 package game;
 
-import java.awt.*;
-
-import constants.*;
+import constants.TimeConstants;
+import constants.WindowConstants;
+import constants.gameStateConstants.GameStateConstants;
+import gameStates.*;
+import graphics.GameInformationRenderer;
 import graphics.GameStateRenderer;
 import input.Input;
 import utils.LevelReader;
-import window.Window;
 import utils.Time;
+import window.Window;
+
+import java.awt.*;
 
 public class Game implements Runnable {
 
     private boolean running;
+
     private Thread gameThread;
-    private Graphics2D graphics;
+
     private Input input;
 
     private Player player;
@@ -21,15 +26,21 @@ public class Game implements Runnable {
     private LevelReader levelReader;
 
     private GameStateRenderer gameStateRenderer;
+    private GameInformationRenderer gameInformationRenderer;
 
-    private OptionChooser optionChooser;
+    private int gameState;
+    private NewGameState newGameState;
+    private NewLevelState newLevelState;
+    private GameOverState gameOverState;
+    private GameWinState gameWinState;
+    private LevelChooseState levelChooseState;
 
-    private boolean isOptionSelected;
+    private int delay;
 
     public Game(){
         running = false;
+
         Window.create(WindowConstants.WIDTH, WindowConstants.HEIGHT, WindowConstants.TITLE, WindowConstants.CLEAR_COLOR, WindowConstants.NUM_BUFFERS);
-        graphics = Window.getGraphics();
 
         input = new Input();
         gameStateRenderer = new GameStateRenderer();
@@ -38,98 +49,146 @@ public class Game implements Runnable {
 
         player = new Player();
 
-        levelReader = new LevelReader(this);
-        fishUpdater = new FishUpdater(player, this, levelReader);
+        levelReader = new LevelReader();
+        fishUpdater = new FishUpdater(player, this);
 
-        optionChooser = new OptionChooser(this, gameStateRenderer, graphics);
-        isOptionSelected = false;
+        gameStateRenderer = new GameStateRenderer();
+        gameInformationRenderer = new GameInformationRenderer();
+
+        gameState = GameStateConstants.NEW_GAME_STATE;
+
+        newGameState = new NewGameState(this, gameStateRenderer);
+        newLevelState = new NewLevelState(this, gameStateRenderer, levelReader, player, fishUpdater);
+        gameOverState = new GameOverState(this, gameStateRenderer, player);
+        gameWinState = new GameWinState(this, gameStateRenderer);
+        levelChooseState = new LevelChooseState(this, gameStateRenderer, newLevelState);
+        delay = 0;
     }
 
     public synchronized void start(){
-
         if (running)
             return;
 
-        running = true;
+        play();
         gameThread = new Thread(this);
         gameThread.start();
     }
 
     public synchronized void stop(){
-
         if (!running)
             return;
-
         running = false;
     }
 
     public synchronized void play(){
-
         if (running)
             return;
-
         running = true;
     }
 
-    public void gameWin(){
-        Window.clear();
-        gameStateRenderer.renderGameWin(graphics);
-        Window.swapBuffers();
-        Time.pauseGame(2, this);
-        isOptionSelected = false;
+    public void newGame(){
+        gameState = GameStateConstants.NEW_GAME_STATE;
     }
 
-    public void levelWin(){
-        Window.clear();
-        Window.scoreRender(graphics, fishUpdater.getScore(), fishUpdater.getScoreWin());
-        Window.swapBuffers();
+    public void chooseLevel(){
+        gameState = GameStateConstants.LEVEL_CHOOSE_STATE;
+    }
 
-        if(levelReader.getLevelNumber() < levelReader.numLevels) nextLevel();
-        else {
-            stop();
-            gameWin();
-        }
+    public void runGame(){
+        gameState = GameStateConstants.GAME_RUN_STATE;
+    }
+
+    public void newLevel(){
+        gameState = GameStateConstants.NEW_LEVEL_STATE;
+        newLevelState.beginNewLevel();
+    }
+
+    public void gameWin(){
+        gameState = GameStateConstants.GAME_WIN_STATE;
     }
 
     public void gameOver(){
-        gameStateRenderer.renderGameOver(graphics, player.getX() - player.getSpriteSize(), player.getY() - player.getSpriteSize());
-        Window.swapBuffers();
+        gameState = GameStateConstants.GAME_OVER_STATE;
     }
 
-    public void nextLevel(){
-        Window.clear();
-        Window.renderLevelNumber(levelReader.getLevelNumber() + 1, graphics);
-        Window.swapBuffers();
-
-        player.initPlayer();
-        levelReader.nextLevel();
-        fishUpdater.initFishUpdater();
-
-        Time.pauseGame(3, this);
+    public void quitGame(){
+        stop();
+        Window.destroy();
+        System.exit(0);
     }
 
-    private void update() {
-        if (!isOptionSelected){
-            isOptionSelected = optionChooser.update(input);
-        } else {
-            player.update(input);
-            fishUpdater.update();
+    public void update(){
+        switch (gameState){
+            case GameStateConstants.NEW_GAME_STATE:
+                if(delay > 3) {
+                    newGameState.update(input);
+                    delay = 0;
+                } delay++;
+                break;
+
+            case GameStateConstants.LEVEL_CHOOSE_STATE:
+                if(delay > 3) {
+                    levelChooseState.update(input);
+                    delay = 0;
+                } delay++;
+                break;
+
+            case GameStateConstants.GAME_RUN_STATE:
+                player.update(input);
+                fishUpdater.update();
+                break;
+
+            case GameStateConstants.NEW_LEVEL_STATE:
+                newLevelState.update(input);
+                break;
+
+            case GameStateConstants.GAME_WIN_STATE:
+                gameWinState.update(input);
+                break;
+
+            case GameStateConstants.GAME_OVER_STATE:
+                gameOverState.update(input);
+                break;
         }
     }
 
-    private void render() {
+    public void render(){
         Window.clear();
-        if (!isOptionSelected){
-            optionChooser.render();
-        } else {
 
-            Window.scoreRender(graphics, fishUpdater.getScore(), fishUpdater.getScoreWin());
+        switch (gameState){
+            case GameStateConstants.NEW_GAME_STATE:
+                newGameState.render();
+                break;
 
-            player.render(graphics);
-            fishUpdater.render(graphics);
+            case GameStateConstants.LEVEL_CHOOSE_STATE:
+                levelChooseState.render();
+                break;
+
+            case GameStateConstants.GAME_RUN_STATE:
+                gameInformationRenderer.scoreRender(fishUpdater.getScore(), fishUpdater.getScoreWin());
+                player.render();
+                fishUpdater.render();
+                break;
+
+            case GameStateConstants.NEW_LEVEL_STATE:
+                newLevelState.render();
+                break;
+
+            case GameStateConstants.GAME_WIN_STATE:
+                gameInformationRenderer.scoreRender(fishUpdater.getScore(), fishUpdater.getScoreWin());
+                player.render();
+                fishUpdater.render();
+                gameWinState.render();
+                break;
+
+            case GameStateConstants.GAME_OVER_STATE:
+                gameInformationRenderer.scoreRender(fishUpdater.getScore(), fishUpdater.getScoreWin());
+                fishUpdater.render();
+                gameOverState.render();
+                break;
         }
-        Window.swapBuffers();
 
+        Window.swapBuffers();
     }
 
     public void run() {
@@ -175,7 +234,7 @@ public class Game implements Runnable {
             }
 
             if (count >= TimeConstants.SECOND) {
-                Window.setTitle(fps, upd, updl);
+                gameInformationRenderer.setTitle(fps, upd, updl);
                 upd = 0;
                 fps = 0;
                 updl = 0;

@@ -1,17 +1,24 @@
 package game;
 
-import constants.*;
+import constants.FishTypeConstants;
+import constants.WindowConstants;
+import window.*;
+import window.Window;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class FishFactory {
 
-    private List fishList;
     private Player player;
+    private Graphics2D graphics;
+
+    private List fishList;
 
     public FishFactory(Player player){
         this.player = player;
+        this.graphics = Window.getGraphics();
     }
 
     public Fish createYellowFish(int speed) {

@@ -1,8 +1,12 @@
 package game;
 
-import constants.*;
+import constants.FishDirectionConstants;
+import constants.ImageNameConstants;
+import constants.WindowConstants;
 import graphics.FishSpriteRenderer;
 import input.Input;
+import window.*;
+import window.Window;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -11,7 +15,7 @@ import java.util.Map;
 
 public class Player {
 
-    private enum Heading{LEFT, RIGHT}
+    private FishSpriteRenderer fishSpriteRenderer;
 
     private int x;
     private int y;
@@ -23,23 +27,11 @@ public class Player {
 
     private int spriteSize;
 
-    private Heading heading;
-    public FishSpriteRenderer fishSpriteRenderer;
-    private Map<Heading, Integer> headingMap;
-
-    private int index;
-
+    private int heading;
 
     public Player(){
-        heading = heading.LEFT;
+        heading = FishDirectionConstants.RIGHT;
         fishSpriteRenderer = new FishSpriteRenderer(ImageNameConstants.PLAYER_LEFT_IMAGE_NAME_64, ImageNameConstants.PLAYER_RIGHT_IMAGE_NAME_64);
-        headingMap = new HashMap<Heading, Integer>();
-
-        index = 0;
-        for (Heading h: Heading.values()){
-            headingMap.put(h, index);
-            index++;
-        }
 
         initPlayer();
     }
@@ -53,7 +45,7 @@ public class Player {
         speed = 5;
         spriteSize = 64;
 
-        fishSpriteRenderer.setSprite(ImageNameConstants.PLAYER_LEFT_IMAGE_NAME_64, ImageNameConstants.PLAYER_RIGHT_IMAGE_NAME_64);
+        fishSpriteRenderer.setPlayersSprite(ImageNameConstants.PLAYER_LEFT_IMAGE_NAME_64, ImageNameConstants.PLAYER_RIGHT_IMAGE_NAME_64);
     }
 
 
@@ -67,14 +59,14 @@ public class Player {
         }
         if (input.getKey(KeyEvent.VK_RIGHT)) {
             newX += speed;
-            heading = Heading.RIGHT;
+            heading = FishDirectionConstants.RIGHT;
         }
         if (input.getKey(KeyEvent.VK_DOWN)) {
             newY += speed;
         }
         if (input.getKey(KeyEvent.VK_LEFT)) {
             newX -= speed;
-            heading = Heading.LEFT;
+            heading = FishDirectionConstants.LEFT;
         }
 
         if (newX < 0) {
@@ -98,7 +90,7 @@ public class Player {
 
         size++;
         spriteSize = 96;
-        fishSpriteRenderer.setSprite(ImageNameConstants.PLAYER_LEFT_IMAGE_NAME_96, ImageNameConstants.PLAYER_RIGHT_IMAGE_NAME_96);
+        fishSpriteRenderer.setPlayersSprite(ImageNameConstants.PLAYER_LEFT_IMAGE_NAME_96, ImageNameConstants.PLAYER_RIGHT_IMAGE_NAME_96);
     }
 
 
@@ -122,7 +114,7 @@ public class Player {
         return size;
     }
 
-    public void render(Graphics2D g) {
-        fishSpriteRenderer.render(g, x, y, headingMap.get(heading));
+    public void render() {
+        fishSpriteRenderer.render(x, y, heading);
     }
 }

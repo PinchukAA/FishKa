@@ -2,10 +2,7 @@ package game;
 
 import constants.FishTypeConstants;
 import utils.LevelReader;
-import window.*;
-import window.Window;
 
-import java.awt.*;
 import java.util.Iterator;
 import java.util.List;
 
@@ -13,14 +10,13 @@ public class FishUpdater {
 
     private Player player;
     private Game game;
-    private LevelReader levelReader;
     private FishFactory fishFactory;
     private Checker checker;
 
     public List<Fish> fishList;
 
-    private int delta;
-    private int gamma;
+    private int choosingDirectionDelay;
+    private int fishCreationDelay;
 
     private int score;
     private int scoreWin;
@@ -37,35 +33,33 @@ public class FishUpdater {
     private int curGreenNum;
 
 
-    public FishUpdater(Player player, Game game, LevelReader levelReader){
+    public FishUpdater(Player player, Game game){
 
         this.player = player;
         this.game = game;
 
-        this.levelReader = levelReader;
-
         fishFactory = new FishFactory(player);
         checker = new Checker(player, game);
-
-        initFishUpdater();
     }
 
-    public void initFishUpdater(){
-        delta = 0;
-        gamma = 0;
+    public void initFishUpdater(int scoreWin, int yellowSpeed, int yellowNum, int greenSpeed, int greenNum, int sharkSpeed, int sharkNum){
+        choosingDirectionDelay = 0;
+        fishCreationDelay = 0;
 
         score = 0;
-        scoreWin = levelReader.getLevel().getScoreWin();
 
-        yellowSpeed = levelReader.getLevel().getYellowSpeed();
-        greenSpeed = levelReader.getLevel().getGreenSpeed();
-        sharkSpeed = levelReader.getLevel().getSharkSpeed();
+        this.scoreWin = scoreWin;
 
-        yellowNum = levelReader.getLevel().getYellowNum();
+        this.yellowSpeed = yellowSpeed;
+        this.yellowNum = yellowNum;
         curYellowNum = yellowNum;
-        greenNum = levelReader.getLevel().getGreenNum();
+
+        this.greenSpeed = greenSpeed;
+        this.greenNum = greenNum;
         curGreenNum = greenNum;
-        sharkNum = levelReader.getLevel().getSharkNum();
+
+        this.sharkSpeed = sharkSpeed;
+        this.sharkNum = sharkNum;
 
         fishList = fishFactory.createFishList(yellowNum, yellowSpeed, greenNum, greenSpeed, sharkNum, sharkSpeed);
 
@@ -81,11 +75,10 @@ public class FishUpdater {
             if(!player.isGrow())
                 if(fish.getType() == FishTypeConstants.SHARK_TYPE ) continue;
 
-            delta++;
-            if (delta > 70){
-
+            choosingDirectionDelay++;
+            if (choosingDirectionDelay > 70){
                 fish.chooseDirection();
-                delta = 0;
+                choosingDirectionDelay = 0;
             }
 
             fish.update();
@@ -116,8 +109,8 @@ public class FishUpdater {
             }
         }
 
-        gamma++;
-        if (gamma > 30){
+        fishCreationDelay++;
+        if (fishCreationDelay > 30){
             if(curYellowNum < yellowNum) {
                 fishList.add(fishFactory.createYellowFish(yellowSpeed));
                 curYellowNum++;
@@ -127,22 +120,22 @@ public class FishUpdater {
                 fishList.add(fishFactory.createGreenFish(greenSpeed));
                 curGreenNum++;
             }
-            gamma = 0;
+            fishCreationDelay = 0;
         }
 
         checker.checkScore(score);
     }
 
-    public void render(Graphics2D graphics){
+    public void render(){
         for(Fish fish: fishList){
             if(!player.isGrow())
-                if(fish.getType() == FishTypeConstants.SHARK_TYPE ) {
+                if(fish.getType() == FishTypeConstants.SHARK_TYPE) {
                     if(checker.getScoreReq() <= score + 3 && checker.getScoreReq() >= score)
-                        Window.renderSharkWarning(graphics, fish);
+                        fish.renderSharkWarning();
                     continue;
                 }
 
-            fish.render(graphics);
+            fish.render();
         }
     }
 

@@ -1,12 +1,11 @@
 package utils;
 
+import constants.ResourceConstants;
+
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-
-import javax.imageio.ImageIO;
-
-import constants.ResourceConstants;
 
 public class ResourceLoader{
 

@@ -46,7 +46,6 @@ public class Checker {
                     && fishY < playerY + playerSpriteSize / 2
                     && playerY + playerSpriteSize / 2 < fishY + fishSpriteSize){
                 System.out.print(" fX " + fishX +" fY "+ fishY + " plX " + playerX + " plY " + playerY + " type " + fish.getType());
-                game.stop();
                 isGameOver = true;
                 game.gameOver();
             }
@@ -87,8 +86,7 @@ public class Checker {
 
     public void checkScore(int score){
         if(score >= scoreWin){
-            game.stop();
-            game.levelWin();
+            game.newLevel();
             return;
         }
 
