@@ -1,4 +1,4 @@
-package Constants;
+package constants;
 
 public class FishTypeConstants {
     public static final int YELLOW_TYPE = 0;

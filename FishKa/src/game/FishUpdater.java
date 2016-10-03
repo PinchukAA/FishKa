@@ -1,7 +1,9 @@
 package game;
 
-import Constants.FishTypeConstants;
+import constants.FishTypeConstants;
 import utils.LevelReader;
+import window.*;
+import window.Window;
 
 import java.awt.*;
 import java.util.Iterator;
@@ -69,6 +71,8 @@ public class FishUpdater {
 
         checker.initChecker(scoreWin);
     }
+
+
     public void update(){
 
         Iterator<Fish> iteratorFish = fishList.iterator();
@@ -86,6 +90,7 @@ public class FishUpdater {
 
             fish.update();
             if(checker.checkPlayer(fish)) {
+                if(checker.isGameOver()) return;
 
                 score += fish.getSize();
                 switch (fish.getType()){
@@ -117,6 +122,7 @@ public class FishUpdater {
                 fishList.add(fishFactory.createYellowFish(yellowSpeed));
                 curYellowNum++;
             }
+
             if(curGreenNum < greenNum) {
                 fishList.add(fishFactory.createGreenFish(greenSpeed));
                 curGreenNum++;
@@ -132,28 +138,18 @@ public class FishUpdater {
             if(!player.isGrow())
                 if(fish.getType() == FishTypeConstants.SHARK_TYPE ) {
                     if(checker.getScoreReq() <= score + 3 && checker.getScoreReq() >= score)
-                        renderSharkWarning(graphics, fish);
+                        Window.renderSharkWarning(graphics, fish);
                     continue;
                 }
 
             fish.render(graphics);
         }
-
     }
-
-    public void renderSharkWarning(Graphics2D graphics, Fish fish){
-        Color color = new Color(128, 56, 54, 150);
-        graphics.setColor(color);
-        graphics.fillRect(fish.getX(), fish.getY(), FishTypeConstants.SHARK_SPRITE_SIZE, FishTypeConstants.SHARK_SPRITE_SIZE);
-
-        graphics.setFont(new Font("TimesRoman", Font.BOLD, 40));
-        graphics.drawString("SHARKS ARE COMING!!!", 380, 380);
-    }
-
 
     public Integer getScore(){
         return score;
     }
+
     public Integer getScoreWin(){
         return scoreWin;
     }

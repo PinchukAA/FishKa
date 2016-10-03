@@ -1,7 +1,7 @@
 package game;
 
-import Constants.*;
-import graphics.FishSprite;
+import constants.*;
+import graphics.FishSpriteRenderer;
 import input.Input;
 
 import java.awt.*;
@@ -24,7 +24,7 @@ public class Player {
     private int spriteSize;
 
     private Heading heading;
-    public FishSprite fishSprite;
+    public FishSpriteRenderer fishSpriteRenderer;
     private Map<Heading, Integer> headingMap;
 
     private int index;
@@ -32,7 +32,7 @@ public class Player {
 
     public Player(){
         heading = heading.LEFT;
-        fishSprite = new FishSprite(ImageNameConstants.PLAYER_LEFT_IMAGE_NAME_64, ImageNameConstants.PLAYER_RIGHT_IMAGE_NAME_64);
+        fishSpriteRenderer = new FishSpriteRenderer(ImageNameConstants.PLAYER_LEFT_IMAGE_NAME_64, ImageNameConstants.PLAYER_RIGHT_IMAGE_NAME_64);
         headingMap = new HashMap<Heading, Integer>();
 
         index = 0;
@@ -53,7 +53,7 @@ public class Player {
         speed = 5;
         spriteSize = 64;
 
-        fishSprite.setSprite(ImageNameConstants.PLAYER_LEFT_IMAGE_NAME_64, ImageNameConstants.PLAYER_RIGHT_IMAGE_NAME_64);
+        fishSpriteRenderer.setSprite(ImageNameConstants.PLAYER_LEFT_IMAGE_NAME_64, ImageNameConstants.PLAYER_RIGHT_IMAGE_NAME_64);
     }
 
 
@@ -98,7 +98,7 @@ public class Player {
 
         size++;
         spriteSize = 96;
-        fishSprite.setSprite(ImageNameConstants.PLAYER_LEFT_IMAGE_NAME_96, ImageNameConstants.PLAYER_RIGHT_IMAGE_NAME_96);
+        fishSpriteRenderer.setSprite(ImageNameConstants.PLAYER_LEFT_IMAGE_NAME_96, ImageNameConstants.PLAYER_RIGHT_IMAGE_NAME_96);
     }
 
 
@@ -123,6 +123,6 @@ public class Player {
     }
 
     public void render(Graphics2D g) {
-        fishSprite.render(g, x, y, headingMap.get(heading));
+        fishSpriteRenderer.render(g, x, y, headingMap.get(heading));
     }
 }

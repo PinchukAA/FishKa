@@ -1,6 +1,4 @@
-package Constants;
-
-import utils.Time;
+package constants;
 
 public class TimeConstants {
     public static final long SECOND	= 1000000000l;

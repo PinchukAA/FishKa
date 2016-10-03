@@ -1,6 +1,11 @@
-package Constants;
+package constants;
 
 public class ImageNameConstants {
+    public static final String GAME_LOGO_IMAGE = "game_logo.png";
+    public static final String NEW_GAME_OPTION_IMAGE = "new_game_option.png";
+    public static final String QUIT_OPTION_IMAGE = "quit_option.png";
+    public static final String CHOOSE_OPTION_IMAGE = "choose_option.png";
+
     public static final String GAME_WIN_IMAGE = "game_win.png";
     public static final String WIN_IMAGE_NAME = "win.png";
     public static final String GAME_OVER_IMAGE_NAME = "game_over.png";

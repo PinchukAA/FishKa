@@ -1,4 +1,4 @@
-package Constants;
+package constants;
 
 public class WindowConstants {
     public static final int	WIDTH = 1200;

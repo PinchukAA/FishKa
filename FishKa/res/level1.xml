@@ -5,6 +5,6 @@
     <yellowNum>25</yellowNum>
     <greenSpeed>2</greenSpeed>
     <greenNum>3</greenNum>
-    <sharkSpeed>3</sharkSpeed>
-    <sharkNum>2</sharkNum>
+    <sharkSpeed>0</sharkSpeed>
+    <sharkNum>0</sharkNum>
 </Level>

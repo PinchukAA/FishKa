@@ -1,10 +1,10 @@
 package game;
 
-import Constants.FishTypeConstants;
-import Constants.FishDirectionConstants;
-import Constants.ImageNameConstants;
-import Constants.WindowConstants;
-import graphics.FishSprite;
+import constants.FishTypeConstants;
+import constants.FishDirectionConstants;
+import constants.ImageNameConstants;
+import constants.WindowConstants;
+import graphics.FishSpriteRenderer;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -25,7 +25,7 @@ public class Fish {
     private int direction;
     private Map<Heading, Integer> headingMap;
 
-    private FishSprite fishSprite;
+    private FishSpriteRenderer fishSpriteRenderer;
     private int spriteSize;
 
     public Fish(int x, int y, int speed, int type){
@@ -52,17 +52,17 @@ public class Fish {
         switch (type){
             case 0:
                 size = 1;
-                fishSprite = new FishSprite(ImageNameConstants.YELLOW_LEFT_IMAGE_NAME, ImageNameConstants.YELLOW_RIGHT_IMAGE_NAME);
+                fishSpriteRenderer = new FishSpriteRenderer(ImageNameConstants.YELLOW_LEFT_IMAGE_NAME, ImageNameConstants.YELLOW_RIGHT_IMAGE_NAME);
                 spriteSize = FishTypeConstants.YELLOW_SPRITE_SIZE;
                 break;
             case 1:
                 size = 2;
-                fishSprite = new FishSprite(ImageNameConstants.GREEN_LEFT_IMAGE_NAME, ImageNameConstants.GREEN_RIGHT_IMAGE_NAME);
+                fishSpriteRenderer = new FishSpriteRenderer(ImageNameConstants.GREEN_LEFT_IMAGE_NAME, ImageNameConstants.GREEN_RIGHT_IMAGE_NAME);
                 spriteSize = FishTypeConstants.GREEN_SPRITE_SIZE;
                 break;
             case 2:
                 size = 3;
-                fishSprite = new FishSprite(ImageNameConstants.SHARK_LEFT_IMAGE_NAME, ImageNameConstants.SHARK_RIGHT_IMAGE_NAME);
+                fishSpriteRenderer = new FishSpriteRenderer(ImageNameConstants.SHARK_LEFT_IMAGE_NAME, ImageNameConstants.SHARK_RIGHT_IMAGE_NAME);
                 spriteSize = FishTypeConstants.SHARK_SPRITE_SIZE;
                 break;
         }
@@ -153,7 +153,7 @@ public class Fish {
     }
 
     public void render(Graphics2D g) {
-        fishSprite.render(g, x, y, headingMap.get(heading));
+        fishSpriteRenderer.render(g, x, y, headingMap.get(heading));
     }
 
 }

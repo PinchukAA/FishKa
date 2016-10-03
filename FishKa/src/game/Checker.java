@@ -1,6 +1,6 @@
 package game;
 
-import Constants.FishTypeConstants;
+import constants.FishTypeConstants;
 
 import java.util.Iterator;
 import java.util.List;
@@ -11,7 +11,8 @@ public class Checker {
 
     private int scoreWin;
     private int scoreReq;
-    private boolean f;
+    private boolean isFirstTime;
+    private boolean isGameOver;
 
     public Checker(Player player, Game game){
         this.player = player;
@@ -19,7 +20,8 @@ public class Checker {
     }
 
     public void initChecker(int scoreWin){
-        f = true;
+        isFirstTime = true;
+        isGameOver = false;
         this.scoreWin = scoreWin;
         scoreReq = scoreWin / 2 + 5;
     }
@@ -42,8 +44,10 @@ public class Checker {
         } else if(fishX < playerX + playerSpriteSize / 2
                     && playerX + playerSpriteSize / 2 < fishX + fishSpriteSize
                     && fishY < playerY + playerSpriteSize / 2
-                    && playerY + playerSpriteSize / 2 < fishY + fishSpriteSize) {
+                    && playerY + playerSpriteSize / 2 < fishY + fishSpriteSize){
                 System.out.print(" fX " + fishX +" fY "+ fishY + " plX " + playerX + " plY " + playerY + " type " + fish.getType());
+                game.stop();
+                isGameOver = true;
                 game.gameOver();
             }
         return false;
@@ -83,14 +87,18 @@ public class Checker {
 
     public void checkScore(int score){
         if(score >= scoreWin){
+            game.stop();
             game.levelWin();
             return;
         }
 
-        if(score >= scoreReq && f){
+        if(score >= scoreReq && isFirstTime){
             player.grow();
-            f = false;
- //           scoreReq *= 4;
+            isFirstTime = false;
         }
+    }
+
+    public boolean isGameOver(){
+        return isGameOver;
     }
 }

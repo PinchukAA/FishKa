@@ -1,6 +1,6 @@
 package game;
 
-import Constants.*;
+import constants.*;
 
 import java.util.ArrayList;
 import java.util.List;

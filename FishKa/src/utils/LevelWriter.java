@@ -4,7 +4,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import java.io.File;
-import Constants.ResourceConstants;
+import constants.ResourceConstants;
 
 public class LevelWriter {
 
@@ -31,7 +31,7 @@ public class LevelWriter {
 
             jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 
-            File XMLFile = new File(ResourceConstants.PATH + ResourceConstants.FILE_NAME + levelNumber + ".xml");
+            File XMLFile = new File(ResourceConstants.PATH + ResourceConstants.LEVEL_FILE_NAME + levelNumber + ".xml");
 
             jaxbMarshaller.marshal(level, XMLFile);
 

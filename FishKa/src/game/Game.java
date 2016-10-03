@@ -2,8 +2,8 @@ package game;
 
 import java.awt.*;
 
-import Constants.*;
-import graphics.GameSprite;
+import constants.*;
+import graphics.GameStateRenderer;
 import input.Input;
 import utils.LevelReader;
 import window.Window;
@@ -20,15 +20,19 @@ public class Game implements Runnable {
     private FishUpdater fishUpdater;
     private LevelReader levelReader;
 
-    private GameSprite gameSprite;
+    private GameStateRenderer gameStateRenderer;
 
-    public Game() {
+    private OptionChooser optionChooser;
+
+    private boolean isOptionSelected;
+
+    public Game(){
         running = false;
         Window.create(WindowConstants.WIDTH, WindowConstants.HEIGHT, WindowConstants.TITLE, WindowConstants.CLEAR_COLOR, WindowConstants.NUM_BUFFERS);
         graphics = Window.getGraphics();
 
         input = new Input();
-        gameSprite = new GameSprite();
+        gameStateRenderer = new GameStateRenderer();
 
         Window.addInputListener(input);
 
@@ -36,9 +40,12 @@ public class Game implements Runnable {
 
         levelReader = new LevelReader(this);
         fishUpdater = new FishUpdater(player, this, levelReader);
+
+        optionChooser = new OptionChooser(this, gameStateRenderer, graphics);
+        isOptionSelected = false;
     }
 
-    public synchronized void start() {
+    public synchronized void start(){
 
         if (running)
             return;
@@ -48,7 +55,7 @@ public class Game implements Runnable {
         gameThread.start();
     }
 
-    public synchronized void stop() {
+    public synchronized void stop(){
 
         if (!running)
             return;
@@ -56,66 +63,73 @@ public class Game implements Runnable {
         running = false;
     }
 
+    public synchronized void play(){
+
+        if (running)
+            return;
+
+        running = true;
+    }
+
     public void gameWin(){
-        running = false;
         Window.clear();
-        gameSprite.renderGameWin(graphics);
+        gameStateRenderer.renderGameWin(graphics);
         Window.swapBuffers();
+        Time.pauseGame(2, this);
+        isOptionSelected = false;
     }
 
-    public void levelWin() {
-        running = false;
+    public void levelWin(){
         Window.clear();
-        gameSprite.renderLevelWin(graphics);
-        scoreRender();
+        Window.scoreRender(graphics, fishUpdater.getScore(), fishUpdater.getScoreWin());
         Window.swapBuffers();
 
-        nextLevel();
+        if(levelReader.getLevelNumber() < levelReader.numLevels) nextLevel();
+        else {
+            stop();
+            gameWin();
+        }
     }
 
-    public void gameOver() {
-        gameSprite.renderGameOver(graphics, player.getX() - player.getSpriteSize(), player.getY() - player.getSpriteSize());
+    public void gameOver(){
+        gameStateRenderer.renderGameOver(graphics, player.getX() - player.getSpriteSize(), player.getY() - player.getSpriteSize());
         Window.swapBuffers();
-        stop();
     }
 
     public void nextLevel(){
+        Window.clear();
+        Window.renderLevelNumber(levelReader.getLevelNumber() + 1, graphics);
         Window.swapBuffers();
 
         player.initPlayer();
         levelReader.nextLevel();
         fishUpdater.initFishUpdater();
 
-        pauseGame();
-    }
-
-    public void pauseGame(){
-        long lastTime = Time.get();
-        while (Time.get() < lastTime + 2000000000l)
-            running = false;
-        running = true;
+        Time.pauseGame(3, this);
     }
 
     private void update() {
-        player.update(input);
-        fishUpdater.update();
+        if (!isOptionSelected){
+            isOptionSelected = optionChooser.update(input);
+        } else {
+            player.update(input);
+            fishUpdater.update();
+        }
     }
 
     private void render() {
         Window.clear();
+        if (!isOptionSelected){
+            optionChooser.render();
+        } else {
 
-        scoreRender();
+            Window.scoreRender(graphics, fishUpdater.getScore(), fishUpdater.getScoreWin());
 
-        player.render(graphics);
-        fishUpdater.render(graphics);
-
+            player.render(graphics);
+            fishUpdater.render(graphics);
+        }
         Window.swapBuffers();
-    }
 
-    private void scoreRender(){
-        graphics.setFont(new Font("TimesRoman", Font.BOLD, 20));
-        graphics.setColor(Color.BLACK);
-        graphics.drawString("Score: " + fishUpdater.getScore() + " / " + fishUpdater.getScoreWin(), 20, 30);
     }
 
     public void run() {
@@ -161,7 +175,7 @@ public class Game implements Runnable {
             }
 
             if (count >= TimeConstants.SECOND) {
-                Window.setTitle(WindowConstants.TITLE + " || Fps: " + fps + " | Upd: " + upd + " | Updl: " + updl);
+                Window.setTitle(fps, upd, updl);
                 upd = 0;
                 fps = 0;
                 updl = 0;

@@ -1,4 +1,4 @@
-package Constants;
+package constants;
 
 public class FishDirectionConstants {
     public static final int UP = 0;
